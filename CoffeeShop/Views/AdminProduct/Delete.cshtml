@@ -1,0 +1,45 @@
+﻿@model CoffeeShop.Models.Product
+
+<div class="container mt-5">
+
+    <h2 class="text-danger">Xóa sản phẩm</h2>
+
+    <hr />
+
+    <div class="card p-4">
+
+        <h4>@Model.ProductName</h4>
+
+        <img src="~/uploads/@Model.Image"
+             width="200"
+             class="mb-3" />
+
+        <h5 class="text-danger">
+            @Model.Price.ToString("N0") VNĐ
+        </h5>
+
+        <p>@Model.Description</p>
+
+        <form asp-action="Delete">
+
+            <input type="hidden"
+                   asp-for="ProductId" />
+
+            <button class="btn btn-danger">
+
+                Xóa sản phẩm
+
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                Hủy
+
+            </a>
+
+        </form>
+
+    </div>
+
+</div>

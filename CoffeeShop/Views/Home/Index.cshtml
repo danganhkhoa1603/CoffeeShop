@@ -1,0 +1,74 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShop.Resources.SharedResource> Localizer
+@model IEnumerable<CoffeeShop.Models.Product>
+
+<div class="hero">
+
+    <div>
+
+        <h1>@Localizer["PremiumCoffee"]</h1>
+
+        <p class="lead">
+
+            @Localizer["EnjoyCoffee"]
+
+        </p>
+
+        <a href="#products" class="btn btn-warning btn-lg">
+
+            @Localizer["BuyNow"]
+
+        </a>
+
+    </div>
+
+</div>
+
+<div class="container mt-5" id="products">
+
+    <h2 class="text-center mb-5">
+
+        @Localizer["FeaturedProducts"]
+
+    </h2>
+
+    <div class="row">
+
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-4 mb-4">
+
+                <div class="card">
+
+                    <img src="~/uploads/@item.Image" class="card-img-top" />
+
+                    <div class="card-body">
+
+                        <h4>@item.ProductName</h4>
+
+                        <p>@item.Description</p>
+
+                        <h4 class="text-danger">
+
+                            @item.Price.ToString("N0") VNĐ
+
+                        </h4>
+
+                        <a asp-controller="Product"
+                           asp-action="Details"
+                           asp-route-id="@item.ProductId"
+                           class="btn btn-primary">
+
+                            @Localizer["ViewDetails"]
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>

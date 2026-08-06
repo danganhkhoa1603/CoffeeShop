@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Chọn đăng nhập";
+}
+
+<link rel="stylesheet" href="~/css/login.css" />
+
+<div class="login-page">
+
+    <div class="login-box">
+
+        <div class="left-side">
+
+            <img src="~/images/logo.png" class="logo-image" />
+
+            <h2>Coffee House</h2>
+
+            <p>Xin chào! Hãy chọn loại tài khoản để tiếp tục.</p>
+
+        </div>
+
+        <div class="right-side">
+
+            <div class="form-box text-center">
+
+                <h2 class="mb-4">Chọn tài khoản</h2>
+
+                <a asp-controller="Account"
+                   asp-action="Login"
+                   class="btn btn-primary">
+                    👤 Đăng nhập khách hàng
+                </a>
+
+                <a asp-controller="Account"
+                   asp-action="EmployeeLogin"
+                   class="btn btn-success">
+                    👨‍💼 Đăng nhập nhân viên
+                </a>
+
+                <a asp-controller="AdminLogin"
+                   asp-action="Login"
+                   class="btn btn-login">
+
+                    👑 Quản trị viên
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,121 @@
+﻿body {
+    background: #fafafa;
+    font-family: 'Segoe UI';
+}
+
+.navbar {
+    padding: 18px 0;
+}
+
+.navbar-brand {
+    color: #7b4b25 !important;
+}
+
+.nav-link {
+    font-size: 18px;
+    margin: 0 10px;
+    color: #222 !important;
+}
+
+    .nav-link:hover {
+        color: #b56a29 !important;
+    }
+
+.hero {
+    height: 550px;
+    background: url('/images/banner.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+
+    .hero h1 {
+        font-size: 70px;
+        font-weight: bold;
+    }
+
+.card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: .3s;
+}
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0,0,0,.15);
+    }
+
+    .card img {
+        height: 280px;
+        object-fit: cover;
+    }
+
+.btn-primary {
+    background: #b56a29;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background: #8b4513;
+    }
+
+.footer {
+    background: #222;
+    color: white;
+    text-align: center;
+    padding: 40px;
+    margin-top: 80px;
+}
+.product-image {
+    border-radius: 15px;
+    transition: .3s;
+}
+
+    .product-image:hover {
+        transform: scale(1.03);
+    }
+
+.btn-primary {
+    border-radius: 30px;
+    padding: 12px 25px;
+}
+
+.quantity {
+    width: 60px;
+    text-align: center;
+}
+.navbar-brand {
+    color: #6F4E37;
+}
+
+.nav-link {
+    font-size: 18px;
+    margin: 0 10px;
+    transition: .3s;
+}
+
+    .nav-link:hover {
+        color: #6F4E37;
+    }
+
+.footer {
+    background: #3E2723;
+}
+
+    .footer i {
+        cursor: pointer;
+        transition: .3s;
+    }
+
+        .footer i:hover {
+            color: #D7A86E;
+        }
+
+body {
+    background: #FAF7F2;
+}

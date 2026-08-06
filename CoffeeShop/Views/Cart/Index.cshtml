@@ -1,0 +1,149 @@
+﻿@model List<CoffeeShop.Models.CartItem>
+
+@{
+    decimal total = 0;
+}
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">🛒 Giỏ hàng</h2>
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-warning">
+
+            Chưa có sản phẩm nào.
+
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered align-middle">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>Ảnh</th>
+
+                    <th>Tên</th>
+
+                    <th>Giá</th>
+
+                    <th>Số lượng</th>
+
+                    <th>Tổng</th>
+
+                    <th></th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    total += item.Total;
+
+                    <tr>
+
+                        <td width="120">
+
+                            <img src="~/uploads/@item.Product.Image"
+                                 width="100"
+                                 class="rounded" />
+
+                        </td>
+
+                        <td>
+
+                            @item.Product.ProductName
+
+                        </td>
+
+                        <td>
+
+                            @item.Product.Price.ToString("N0") VNĐ
+
+                        </td>
+
+                        <td>
+
+                            <a asp-action="Decrease"
+                               asp-route-id="@item.Product.ProductId"
+                               class="btn btn-warning btn-sm">
+
+                                -
+
+                            </a>
+
+                            <span class="mx-3">
+
+                                @item.Quantity
+
+                            </span>
+
+                            <a asp-action="Increase"
+                               asp-route-id="@item.Product.ProductId"
+                               class="btn btn-success btn-sm">
+
+                                +
+
+                            </a>
+
+                        </td>
+
+                        <td>
+
+                            @item.Total.ToString("N0") VNĐ
+
+                        </td>
+
+                        <td>
+
+                            <a asp-action="Remove"
+                               asp-route-id="@item.Product.ProductId"
+                               class="btn btn-danger">
+
+                                Xóa
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                }
+
+            </tbody>
+
+        </table>
+
+        <div class="text-end">
+
+            <h3>
+
+                Tổng tiền:
+
+                <span class="text-danger">
+
+                    @total.ToString("N0") VNĐ
+
+                </span>
+
+            </h3>
+
+            <a asp-controller="Cart"
+               asp-action="Checkout"
+               class="btn btn-success">
+
+                Thanh toán
+
+            </a>
+
+        </div>
+
+    }
+
+</div>

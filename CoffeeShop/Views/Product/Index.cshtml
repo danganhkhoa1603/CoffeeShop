@@ -1,0 +1,44 @@
+﻿@model IEnumerable<CoffeeShop.Models.Product>
+
+@{
+    ViewData["Title"] = "Coffee";
+}
+
+<h2 class="text-center mt-4">Danh sách Coffee</h2>
+
+<div class="row">
+
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow">
+
+                <img src="@item.Image"
+                     class="card-img-top"
+                     style="height:250px;object-fit:cover;">
+
+                <div class="card-body">
+
+                    <h4>@item.ProductName</h4>
+
+                    <p>@item.Description</p>
+
+                    <h5 class="text-danger">
+                        @item.Price.ToString("N0") VNĐ
+                    </h5>
+
+                    <a asp-action="Details"
+                       asp-route-id="@item.ProductId"
+                       class="btn btn-primary">
+                        Xem chi tiết
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>

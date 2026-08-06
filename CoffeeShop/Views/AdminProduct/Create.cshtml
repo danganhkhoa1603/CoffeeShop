@@ -1,0 +1,80 @@
+﻿@model CoffeeShop.Models.Product
+
+@{
+    ViewData["Title"] = "Thêm sản phẩm";
+}
+
+<div class="container mt-5">
+
+    <h2>Thêm sản phẩm</h2>
+
+    <form asp-action="Create"
+          enctype="multipart/form-data"
+          method="post">
+
+        <div class="mb-3">
+
+            <label>Tên sản phẩm</label>
+
+            <input asp-for="ProductName"
+                   class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Mô tả</label>
+
+            <textarea asp-for="Description"
+                      class="form-control"></textarea>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Giá</label>
+
+            <input asp-for="Price"
+                   class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Số lượng</label>
+
+            <input asp-for="Stock"
+                   class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Danh mục</label>
+
+            <select asp-for="CategoryId"
+                    asp-items="ViewBag.CategoryId"
+                    class="form-control">
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Ảnh</label>
+
+            <input asp-for="ImageFile"
+                   class="form-control"
+                   type="file" />
+
+        </div>
+
+        <button class="btn btn-success">
+
+            Lưu sản phẩm
+
+        </button>
+
+    </form>
+
+</div>

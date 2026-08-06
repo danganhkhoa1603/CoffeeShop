@@ -1,0 +1,28 @@
+﻿body {
+    margin: 0;
+    background: #f4f6f9;
+}
+
+.sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: #3d2514;
+    color: white;
+}
+
+    .sidebar a {
+        display: block;
+        color: white;
+        text-decoration: none;
+        padding: 18px;
+        font-size: 17px;
+    }
+
+        .sidebar a:hover {
+            background: #6f4e37;
+        }
+
+.content {
+    width: 100%;
+    padding: 30px;
+}

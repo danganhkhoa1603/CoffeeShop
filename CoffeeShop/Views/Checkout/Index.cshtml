@@ -1,0 +1,126 @@
+﻿@using CoffeeShop.Extensions
+@using CoffeeShop.Models
+
+@model CoffeeShop.Models.Order
+
+@{
+    var cart = Context.Session.GetObject<List<CartItem>>("Cart")
+               ?? new List<CartItem>();
+
+    decimal total = cart.Sum(x => x.Total);
+
+    decimal ship = 20000;
+
+    decimal grand = total + ship;
+}
+
+
+<div class="container mt-5">
+
+    <h2>Thanh toán</h2>
+
+    <form method="post">
+
+        <div class="mb-3">
+
+            <label>Họ tên</label>
+
+            <input asp-for="CustomerName"
+                   class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Số điện thoại</label>
+
+            <input asp-for="Phone"
+                   class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Địa chỉ</label>
+
+            <input asp-for="Address"
+                   class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Ghi chú</label>
+
+            <textarea asp-for="Note"
+                      class="form-control"></textarea>
+
+        </div>
+
+        <button type="submit"
+                class="btn btn-success btn-lg w-100">
+
+            🛒 Xác nhận đặt hàng
+
+        </button>
+    </form>
+    <hr />
+
+    <h3>Đơn hàng của bạn</h3>
+
+    <table class="table">
+
+        <thead>
+
+            <tr>
+
+                <th>Sản phẩm</th>
+
+                <th>SL</th>
+
+                <th>Thành tiền</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in cart)
+            {
+                <tr>
+
+                    <td>@item.Product.ProductName</td>
+
+                    <td>@item.Quantity</td>
+
+                    <td>@item.Total.ToString("N0") VNĐ</td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+    <div class="text-end">
+
+        <h4>
+            Tạm tính:
+            @total.ToString("N0") VNĐ
+        </h4>
+
+        <h4>
+            Phí ship:
+            @ship.ToString("N0") VNĐ
+        </h4>
+
+        <h2 class="text-danger">
+
+            Tổng:
+            @grand.ToString("N0") VNĐ
+
+        </h2>
+
+    </div>
+</div>

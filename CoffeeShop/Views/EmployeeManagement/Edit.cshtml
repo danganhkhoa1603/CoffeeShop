@@ -1,0 +1,51 @@
+﻿@model CoffeeShop.Models.User
+
+<div class="container mt-5">
+
+    <h2>Sửa nhân viên</h2>
+
+    <form asp-action="Create">
+
+        <div class="mb-3">
+
+            <label>Họ tên</label>
+
+            <input asp-for="FullName" class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>SĐT</label>
+
+            <input asp-for="Phone" class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Địa chỉ</label>
+
+            <input asp-for="Address" class="form-control" />
+
+        </div>
+
+        <div class="mb-3">  
+
+            <label>Mật khẩu</label>
+
+            <input asp-for="Password"
+                   type="password"
+                   class="form-control" />
+
+        </div>
+
+        <button class="btn btn-success">
+
+            Lưu
+
+        </button>
+
+    </form>
+
+</div>

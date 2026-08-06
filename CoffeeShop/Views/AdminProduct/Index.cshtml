@@ -1,0 +1,105 @@
+﻿
+@model IEnumerable<CoffeeShop.Models.Product>
+@{
+    Layout = "_AdminLayout";
+}
+
+<div class="d-flex justify-content-between">
+
+    <h2>
+
+        Quản lý sản phẩm
+
+    </h2>
+
+    <a asp-action="Create"
+       class="btn btn-success">
+
+        + Thêm sản phẩm
+
+    </a>
+
+</div>
+
+<table class="table table-hover bg-white mt-4">
+
+    <thead class="table-dark">
+
+        <tr>
+
+            <th>Ảnh</th>
+
+            <th>Tên</th>
+
+            <th>Giá</th>
+
+            <th>Tồn kho</th>
+
+            <th></th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+
+            <tr>
+
+                <td width="120">
+
+                    <img src="~/uploads/@item.Image"
+                         width="80"
+                         class="rounded" />
+
+                </td>
+
+                <td>
+
+                    @item.ProductName
+
+                </td>
+
+                <td>
+
+                    @item.Price.ToString("N0")
+
+                    VNĐ
+
+                </td>
+
+                <td>
+
+                    @item.Stock
+
+                </td>
+
+                <td>
+
+                    <a asp-action="Edit"
+                       asp-route-id="@item.ProductId"
+                       class="btn btn-warning btn-sm">
+
+                        Sửa
+
+                    </a>
+
+                    <a asp-action="Delete"
+                       asp-route-id="@item.ProductId"
+                       class="btn btn-danger btn-sm">
+
+                        Xóa
+
+                    </a>
+
+                </td>
+
+            </tr>
+
+        }
+
+    </tbody>
+
+</table>

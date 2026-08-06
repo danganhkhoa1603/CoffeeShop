@@ -1,0 +1,84 @@
+﻿@model CoffeeShop.Models.Product
+
+<div class="container mt-5">
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <img src="~/uploads/@Model.Image"
+                 class="img-fluid product-image" />
+                 class="img-fluid rounded shadow" />
+
+        </div>
+
+        <div class="col-md-6">
+
+            <h2 class="fw-bold">
+
+                @Model.ProductName
+
+            </h2>
+
+            <div class="text-warning fs-4">
+
+                ★★★★★
+
+            </div>
+
+            <h3 class="text-danger mt-3">
+
+                @Model.Price.ToString("N0") VNĐ
+
+            </h3>
+
+            <hr />
+
+            <p>
+
+                @Model.Description
+
+            </p>
+
+            <p>
+
+                <strong>Tồn kho:</strong>
+
+                @Model.Stock
+
+            </p>
+
+            <div class="d-flex align-items-center mb-4">
+
+                <button class="btn btn-outline-secondary">
+
+                    -
+
+                </button>
+
+                <input value="1"
+                       class="form-control text-center mx-2"
+                       style="width:70px" />
+
+                <button class="btn btn-outline-secondary">
+
+                    +
+
+                </button>
+
+            </div>
+
+            <a asp-controller="Cart"
+               asp-action="AddToCart"
+               asp-route-id="@Model.ProductId"
+               class="btn btn-primary btn-lg">
+
+                🛒 Thêm vào giỏ
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
