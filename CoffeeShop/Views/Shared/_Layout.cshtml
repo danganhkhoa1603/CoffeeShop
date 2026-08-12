@@ -1,6 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Http
 @inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShop.Resources.SharedResource> Localizer
 
+@{
+    var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
+}
+
 <!DOCTYPE html>
 <html lang="@System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName">
 <head>
@@ -19,149 +24,182 @@
     <nav class="navbar navbar-expand-lg bg-white shadow-sm">
         <div class="container">
 
-            <a class="navbar-brand fw-bold fs-2" asp-controller="Home" asp-action="Index">
+            <a class="navbar-brand fw-bold fs-2"
+                   asp-controller="Home"
+                   asp-action="Index">
                 ☕ CoffeeHouse
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#menu">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="menu">
 
-                <!-- Menu chính -->
+                <!-- MENU -->
                 <ul class="navbar-nav mx-auto">
+
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Home" asp-action="Index">
+                        <a class="nav-link @(currentAction == "Index" && currentController == "Home" ? "active" : "")"
+                               asp-controller="Home"
+                               asp-action="Index">
                             @Localizer["Home"]
                         </a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Home" asp-action="Store">
+                        <a class="nav-link @(currentAction == "Store" ? "active" : "")"
+                               asp-controller="Home"
+                               asp-action="Store">
                             @Localizer["Store"]
                         </a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Home" asp-action="About">
+                        <a class="nav-link @(currentAction == "About" ? "active" : "")"
+                               asp-controller="Home"
+                               asp-action="About">
                             @Localizer["About"]
                         </a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Home" asp-action="Contact">
+                        <a class="nav-link @(currentAction == "Contact" ? "active" : "")"
+                               asp-controller="Home"
+                               asp-action="Contact">
                             @Localizer["Contact"]
                         </a>
                     </li>
+
                 </ul>
 
                 <div class="d-flex align-items-center">
 
-                    <a href="#" class="text-dark me-3">
-                        <i class="bi bi-search fs-5"></i>
-                    </a>
+                    <!-- SEARCH -->
+                    <form asp-controller="Home"
+                          asp-action="Store"
+                          method="get"
+                          class="d-flex me-3">
 
+                        <div class="input-group">
+
+                            <input type="text"
+                                   name="keyword"
+                                   class="form-control search-box"
+                                   value="@Context.Request.Query["keyword"]"
+                                   placeholder="@Localizer["Search"]" />
+
+                            <button class="btn btn-coffee" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                    <!-- LOGIN -->
                     @if (Context.Session.GetString("UserName") == null)
                     {
-                        <a asp-controller="Account" asp-action="ChooseRole" class="text-dark me-3">
+                        <a asp-controller="Account"
+                               asp-action="ChooseRole"
+                               class="text-dark me-3">
                             <i class="bi bi-person fs-5"></i>
                         </a>
                     }
                     else
                     {
                         <div class="dropdown me-3">
-                            <a class="text-dark text-decoration-none dropdown-toggle" href="#" data-bs-toggle="dropdown">
+
+                            <a class="text-dark text-decoration-none dropdown-toggle"
+                                   href="#"
+                                   data-bs-toggle="dropdown">
                                 👋 @Context.Session.GetString("UserName")
                             </a>
 
                             <ul class="dropdown-menu">
+
                                 @if (Context.Session.GetString("Role") == "Admin")
                                 {
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Admin" asp-action="Index">
-                                            👑 @Localizer["AdminDashboard"]
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Product" asp-action="Index">
-                                            ☕ @Localizer["ManageProducts"]
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="AdminOrder" asp-action="Index">
-                                            📦 @Localizer["ManageOrders"]
-                                        </a>
-                                    </li>
+                                    <li><a class="dropdown-item" asp-controller="Admin" asp-action="Index">👑 @Localizer["AdminDashboard"]</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">☕ @Localizer["ManageProducts"]</a></li>
+                                    <li><a class="dropdown-item" asp-controller="AdminOrder" asp-action="Index">📦 @Localizer["ManageOrders"]</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                 }
 
                                 @if (Context.Session.GetString("Role") == "Employee")
                                 {
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Employee" asp-action="Index">
-                                            👨‍💼 @Localizer["EmployeeDashboard"]
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Product" asp-action="Index">
-                                            ☕ @Localizer["ManageProducts"]
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="AdminOrder" asp-action="Index">
-                                            📦 @Localizer["ManageOrders"]
-                                        </a>
-                                    </li>
+                                    <li><a class="dropdown-item" asp-controller="Employee" asp-action="Index">👨‍💼 @Localizer["EmployeeDashboard"]</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">☕ @Localizer["ManageProducts"]</a></li>
+                                    <li><a class="dropdown-item" asp-controller="AdminOrder" asp-action="Index">📦 @Localizer["ManageOrders"]</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                 }
 
                                 @if (Context.Session.GetString("Role") == "Customer")
                                 {
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Order" asp-action="History">
-                                            📦 @Localizer["MyOrders"]
-                                        </a>
-                                    </li>
+                                    <li><a class="dropdown-item" asp-controller="Order" asp-action="History">📦 @Localizer["MyOrders"]</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                 }
 
                                 <li>
-                                    <a class="dropdown-item" asp-controller="Account" asp-action="Logout">
+                                    <a class="dropdown-item"
+                                           asp-controller="Account"
+                                           asp-action="Logout">
                                         🚪 @Localizer["Logout"]
                                     </a>
                                 </li>
+
                             </ul>
+
                         </div>
                     }
 
-                    <!-- Dropdown Chọn ngôn ngữ động -->
+                    <!-- LANGUAGE -->
                     <div class="dropdown me-3">
-                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+
+                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                                type="button"
+                                data-bs-toggle="dropdown">
+
                             🌐 @(System.Globalization.CultureInfo.CurrentCulture.Name.StartsWith("vi") ? "VI" : "EN")
+
                         </button>
 
                         <ul class="dropdown-menu dropdown-menu-end">
+
                             <li>
                                 <a class="dropdown-item"
-                                   asp-controller="Language"
-                                   asp-action="SetLanguage"
-                                   asp-route-culture="vi"
-                                   asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString">
+                                       asp-controller="Language"
+                                       asp-action="SetLanguage"
+                                       asp-route-culture="vi"
+                                       asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString">
                                     🇻🇳 Tiếng Việt
                                 </a>
                             </li>
+
                             <li>
                                 <a class="dropdown-item"
-                                   asp-controller="Language"
-                                   asp-action="SetLanguage"
-                                   asp-route-culture="en"
-                                   asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString">
+                                       asp-controller="Language"
+                                       asp-action="SetLanguage"
+                                       asp-route-culture="en"
+                                       asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString">
                                     🇬🇧 English
                                 </a>
                             </li>
+
                         </ul>
+
                     </div>
 
-                    <a asp-controller="Cart" asp-action="Index" class="text-dark position-relative">
+                    <!-- CART -->
+                    <a asp-controller="Cart"
+                           asp-action="Index"
+                           class="text-dark position-relative">
+
                         <i class="bi bi-cart fs-5"></i>
+
                     </a>
 
                 </div>
@@ -175,26 +213,38 @@
         @RenderBody()
     </main>
 
-    <footer class="footer bg-dark text-white mt-5 py-4">
+    <footer class="footer bg-dark text-white py-4">
+
         <div class="container text-center">
+
             <h5>Coffee House</h5>
+
             <p>Địa chỉ: TP. Hồ Chí Minh</p>
+
             <p>Hotline: 0909 123 456</p>
+
             <p>Email: coffeeshop@gmail.com</p>
 
             <div class="mt-3">
+
                 <i class="bi bi-facebook fs-4 me-3"></i>
+
                 <i class="bi bi-instagram fs-4 me-3"></i>
+
                 <i class="bi bi-youtube fs-4 me-3"></i>
+
                 <i class="bi bi-tiktok fs-4"></i>
+
             </div>
 
-            <hr />
+            <hr>
 
             <p class="mb-0">
                 © 2026 Coffee Shop. All Rights Reserved.
             </p>
+
         </div>
+
     </footer>
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
