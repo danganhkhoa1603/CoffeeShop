@@ -16,9 +16,9 @@ namespace CoffeeShop.Controllers
         // Trang chủ
         public async Task<IActionResult> Index()
         {
-            var products = await _context.Products
-                .Include(p => p.Category)
-                .ToListAsync();
+            var products = _context.Products
+                       .Where(p => p.CategoryId == 1 || p.CategoryId == 2)
+                       .ToList();
 
             return View(products);
         }
@@ -32,7 +32,11 @@ namespace CoffeeShop.Controllers
         // Trang cửa hàng
         public IActionResult Store()
         {
-            return View();
+            var products = _context.Products
+                                   .Where(p => p.CategoryId == 3)
+                                   .ToList();
+
+            return View(products);
         }
 
         // Trang liên hệ

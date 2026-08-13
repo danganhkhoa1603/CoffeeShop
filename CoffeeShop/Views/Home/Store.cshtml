@@ -1,66 +1,80 @@
-﻿@{
+﻿@model IEnumerable<CoffeeShop.Models.Product>
+
+@{
     ViewData["Title"] = "Cửa hàng";
 }
 
-<div class="container mt-5">
+<div class="container py-5">
 
-    <h1 class="text-center mb-5">🏪 Hệ thống cửa hàng</h1>
+    <section class="store-title mb-5">
+
+        <div class="container text-center">
+
+            <span class="store-tag">
+                COFFEE BEANS COLLECTION
+            </span>
+
+            <h1>
+                Cửa Hàng Cà Phê Nguyên Liệu
+            </h1>
+
+            <p>
+                Khám phá các dòng hạt cà phê, cà phê rang xay và nguyên liệu pha chế
+                được tuyển chọn từ những vùng nguyên liệu chất lượng cao.
+            </p>
+
+        </div>
+
+    </section>
 
     <div class="row">
 
-        <div class="col-md-4">
+        @if (!Model.Any())
+        {
+            <div class="col-12 text-center">
+                <h4>Hiện chưa có sản phẩm.</h4>
+            </div>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-4 col-md-6 mb-4">
 
-            <div class="card shadow">
+                    <div class="card product-card h-100">
 
-                <div class="card-body">
+                        <img src="~/uploads/@item.Image"
+                             class="product-image"
+                             alt="@item.ProductName" />
 
-                    <h4>Chi nhánh Quận 1</h4>
+                        <div class="card-body text-center">
 
-                    <p>123 Nguyễn Huệ, Quận 1</p>
+                            <h4>@item.ProductName</h4>
 
-                    <p>☎ 0909 123 456</p>
+                            <p class="text-muted">
+                                @item.Description
+                            </p>
+
+                            <h5 class="text-danger mb-3">
+                                @item.Price.ToString("N0") VNĐ
+                            </h5>
+
+                            <a asp-controller="Product"
+                                   asp-action="Details"
+                                   asp-route-id="@item.ProductId"
+                                   class="btn btn-coffee w-100">
+
+                                Xem chi tiết
+
+                            </a>
+
+                        </div>
+
+                    </div>
 
                 </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-4">
-
-            <div class="card shadow">
-
-                <div class="card-body">
-
-                    <h4>Chi nhánh Bình Thạnh</h4>
-
-                    <p>88 Điện Biên Phủ</p>
-
-                    <p>☎ 0908 888 888</p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-4">
-
-            <div class="card shadow">
-
-                <div class="card-body">
-
-                    <h4>Chi nhánh Thủ Đức</h4>
-
-                    <p>25 Phạm Trần Kim Ngân</p>
-
-                    <p>☎ 0907 777 777</p>
-
-                </div>
-
-            </div>
-
-        </div>
+            }
+        }
 
     </div>
 

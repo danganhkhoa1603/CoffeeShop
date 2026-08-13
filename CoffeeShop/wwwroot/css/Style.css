@@ -455,3 +455,249 @@ main {
         font-size: 48px;
     }
 }
+/* ABOUT HEADER */
+
+.about-header {
+    height: 500px;
+    background: url('/uploads/about-header.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.overlay {
+    background: rgba(0,0,0,.45);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .overlay h1 {
+        color: white;
+        font-size: 70px;
+        font-weight: 800;
+    }
+
+    .overlay p {
+        color: white;
+        font-size: 22px;
+    }
+
+/* Branch */
+
+.branch-menu {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.branch-btn {
+    padding: 12px 30px;
+    border: none;
+    background: #eee;
+    border-radius: 30px;
+    transition: .3s;
+    font-weight: 600;
+}
+
+    .branch-btn:hover {
+        background: #8B5E3C;
+        color: white;
+    }
+
+    .branch-btn.active {
+        background: #8B5E3C;
+        color: white;
+    }
+
+.branch-image {
+    width: 100%;
+    height: 550px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,.15);
+}
+/* =========================
+   STORE TITLE
+========================= */
+
+.store-title {
+    background: linear-gradient(135deg,#6F4E37,#A67C52);
+    color: white;
+    padding: 70px 30px;
+    border-radius: 25px;
+    margin-top: 40px;
+    margin-bottom: 50px;
+    position: relative;
+    overflow: hidden;
+}
+
+    .store-title::before {
+        content: "";
+        width: 280px;
+        height: 280px;
+        background: rgba(255,255,255,.08);
+        border-radius: 50%;
+        position: absolute;
+        top: -120px;
+        right: -80px;
+    }
+
+    .store-title::after {
+        content: "";
+        width: 180px;
+        height: 180px;
+        background: rgba(255,255,255,.06);
+        border-radius: 50%;
+        position: absolute;
+        bottom: -70px;
+        left: -60px;
+    }
+
+    .store-title h1 {
+        font-size: 48px;
+        font-weight: 800;
+        margin: 15px 0;
+        position: relative;
+        z-index: 2;
+    }
+
+    .store-title p {
+        max-width: 700px;
+        margin: auto;
+        font-size: 18px;
+        line-height: 32px;
+        color: rgba(255,255,255,.92);
+        position: relative;
+        z-index: 2;
+    }
+
+.store-tag {
+    display: inline-block;
+    background: rgba(255,255,255,.18);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    position: relative;
+    z-index: 2;
+}
+/*==========================
+CONTACT
+==========================*/
+
+.contact-header {
+    height: 420px;
+    background: url('/uploads/contact-banner.jpg') center/cover;
+    position: relative;
+}
+
+    .contact-header .overlay {
+        background: rgba(0,0,0,.45);
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .contact-header h1 {
+        font-size: 60px;
+        font-weight: 800;
+        color: #fff;
+    }
+
+    .contact-header p {
+        font-size: 20px;
+        color: #fff;
+    }
+
+.contact-card,
+.contact-info {
+    background: #fff;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    height: 100%;
+}
+
+    .contact-info p {
+        font-size: 17px;
+        margin-bottom: 18px;
+        color: #555;
+    }
+
+.social {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+    .social i {
+        font-size: 30px;
+        color: #8B5E3C;
+        cursor: pointer;
+        transition: .3s;
+    }
+
+        .social i:hover {
+            transform: scale(1.2);
+            color: #5A3825;
+        }
+
+.form-control {
+    padding: 14px;
+    border-radius: 12px;
+}
+
+.accordion-item {
+    border: none;
+    margin-bottom: 15px;
+    border-radius: 15px !important;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,.08);
+}
+
+.accordion-button {
+    font-weight: 600;
+}
+
+    .accordion-button:not(.collapsed) {
+        background: #8B5E3C;
+        color: white;
+    }
+.branch-card {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    text-align: center;
+}
+
+.branch-photo {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    border-radius: 15px;
+    margin-bottom: 25px;
+}
+
+.branch-info h3 {
+    color: #6F4E37;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.branch-info p {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.form-select {
+    border-radius: 30px;
+    padding: 12px;
+}

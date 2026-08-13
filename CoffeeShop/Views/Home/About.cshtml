@@ -2,43 +2,178 @@
     ViewData["Title"] = "Giới thiệu";
 }
 
-<div class="container mt-5">
+<!-- HEADER -->
+<section class="about-header">
 
-    <h1 class="text-center mb-4">☕ Giới thiệu Coffee Shop</h1>
+    <div class="overlay">
 
-    <div class="row">
+        <div class="container text-center">
 
-        <div class="col-md-6">
-
-            <img src="~/images/about.jpg"
-                 class="img-fluid rounded shadow" />
-
-        </div>
-
-        <div class="col-md-6">
-
-            <h3>Về chúng tôi</h3>
+            <h1>Coffee House</h1>
 
             <p>
-                Coffee Shop là cửa hàng chuyên cung cấp các loại cà phê
-                nguyên chất, cà phê rang xay và các sản phẩm pha chế
-                chất lượng cao.
+                Every Cup Has A Story
             </p>
-
-            <p>
-                Chúng tôi mong muốn mang đến trải nghiệm thưởng thức cà phê
-                tốt nhất cho mọi khách hàng.
-            </p>
-
-            <ul>
-                <li>✔ Cà phê nguyên chất</li>
-                <li>✔ Giao hàng toàn quốc</li>
-                <li>✔ Giá tốt</li>
-                <li>✔ Hỗ trợ 24/7</li>
-            </ul>
 
         </div>
 
     </div>
 
-</div>
+</section>
+
+<!-- GIỚI THIỆU -->
+
+<section class="container py-5">
+
+    <div class="row align-items-center">
+
+        <div class="col-lg-6">
+
+            <img src="~/uploads/about.jpg"
+                 class="img-fluid rounded-4 shadow">
+
+        </div>
+
+        <div class="col-lg-6">
+
+            <h2 class="fw-bold mb-4">
+
+                Về Chúng Tôi
+
+            </h2>
+
+            <p>
+
+                Coffee House là thương hiệu cà phê mang đến
+                những hạt cà phê nguyên chất được tuyển chọn
+                từ các vùng nguyên liệu nổi tiếng của Việt Nam.
+
+            </p>
+
+            <p>
+
+                Chúng tôi luôn đặt chất lượng, trải nghiệm khách hàng
+                và không gian thưởng thức lên hàng đầu.
+
+            </p>
+
+            <div class="row mt-4">
+
+                <div class="col-6">
+
+                    <h3>50+</h3>
+
+                    <p>Đồ uống</p>
+
+                </div>
+
+                <div class="col-6">
+
+                    <h3>10K+</h3>
+
+                    <p>Khách hàng</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- CHI NHÁNH -->
+
+<section class="container py-5">
+
+    <h2 class="text-center fw-bold mb-5">
+
+        Hệ Thống Chi Nhánh
+
+    </h2>
+
+    <div class="branch-menu">
+
+        <button class="branch-btn active"
+                onclick="showBranch(1)">
+            Quận 1
+        </button>
+
+        <button class="branch-btn"
+                onclick="showBranch(2)">
+            Bình Thạnh
+        </button>
+
+        <button class="branch-btn"
+                onclick="showBranch(3)">
+            Thủ Đức
+        </button>
+
+    </div>
+
+    <div class="branch-content mt-5">
+
+        <img id="branchImage"
+             src="~/uploads/store1.jpg"
+             class="branch-image">
+
+        <div class="mt-4 text-center">
+
+            <h3 id="branchTitle">
+                Chi nhánh Quận 1
+            </h3>
+
+            <p id="branchAddress">
+                123 Nguyễn Huệ, Quận 1
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+@section Scripts {
+
+    <script>
+
+        const branches = [
+
+        {
+        title:"Chi nhánh Quận 1",
+        address:"123 Nguyễn Huệ, Quận 1",
+        image:"/uploads/store1.jpg"
+        },
+
+        {
+        title:"Chi nhánh Bình Thạnh",
+        address:"88 Điện Biên Phủ",
+        image:"/uploads/store2.jpg"
+        },
+
+        {
+        title:"Chi nhánh Thủ Đức",
+        address:"25 Phạm Trần Kim Ngân",
+        image:"/uploads/store3.jpg"
+        }
+
+        ];
+
+        function showBranch(i){
+
+        document.getElementById("branchImage").src=branches[i-1].image;
+
+        document.getElementById("branchTitle").innerHTML=branches[i-1].title;
+
+        document.getElementById("branchAddress").innerHTML=branches[i-1].address;
+
+        document.querySelectorAll(".branch-btn").forEach(x=>x.classList.remove("active"));
+
+        event.target.classList.add("active");
+
+        }
+
+    </script>
+
+}
