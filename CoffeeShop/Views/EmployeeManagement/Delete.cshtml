@@ -1,5 +1,45 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model CoffeeShop.Models.User
 @{
+    ViewData["Title"] = "Xác nhận xóa Nhân viên";
+    Layout = "_AdminLayout";
 }
+
+<div class="mb-3">
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill">
+        <i class="bi bi-arrow-left"></i> Quay lại danh sách nhân viên
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="admin-card text-center p-4">
+            <div class="text-danger mb-3">
+                <i class="bi bi-exclamation-triangle-fill fs-1"></i>
+            </div>
+
+            <h4 class="fw-bold text-dark mb-2">Xác nhận Xóa Nhân viên</h4>
+            <p class="text-muted mb-4">Bạn có chắc chắn muốn xóa tài khoản nhân viên dưới đây không? Hành động này không thể hoàn tác.</p>
+
+            <div class="card p-3 bg-light border-0 mb-4 text-start">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="user-avatar bg-danger text-white">
+                        @Model.FullName.Substring(0, 1).ToUpper()
+                    </div>
+                    <div>
+                        <h6 class="fw-bold text-dark mb-1">@Model.FullName</h6>
+                        <small class="text-muted d-block"><i class="bi bi-telephone me-1"></i> SĐT: @Model.Phone</small>
+                        <small class="text-muted d-block"><i class="bi bi-geo-alt me-1"></i> Địa chỉ: @(string.IsNullOrEmpty(Model.Address) ? "Chưa cập nhật" : Model.Address)</small>
+                    </div>
+                </div>
+            </div>
+
+            <form asp-action="Delete" method="post" class="d-flex justify-content-center gap-2">
+                <input type="hidden" asp-for="UserId" />
+                <a asp-action="Index" class="btn btn-light border px-4">Hủy bỏ</a>
+                <button type="submit" class="btn btn-danger px-4">
+                    <i class="bi bi-trash me-1"></i> Xóa nhân viên
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

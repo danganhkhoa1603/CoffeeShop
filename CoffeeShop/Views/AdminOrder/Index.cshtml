@@ -1,5 +1,194 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model IEnumerable<CoffeeShop.Models.Order>
 @{
+    ViewData["Title"] = "Quản lý Đơn hàng";
+    Layout = "_AdminLayout";
+    var currentStatus = ViewBag.CurrentStatus as string ?? "Tất cả";
 }
+
+<!-- Stat Cards Grid -->
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-icon coffee">
+            <i class="bi bi-bag-check-fill"></i>
+        </div>
+        <div class="stat-details">
+            <h5>Tổng đơn hàng</h5>
+            <div class="stat-value">@ViewBag.TotalOrders</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon amber">
+            <i class="bi bi-clock-history"></i>
+        </div>
+        <div class="stat-details">
+            <h5>Chờ xác nhận</h5>
+            <div class="stat-value text-warning">@ViewBag.PendingOrders</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon green">
+            <i class="bi bi-check-circle-fill"></i>
+        </div>
+        <div class="stat-details">
+            <h5>Đã hoàn thành</h5>
+            <div class="stat-value text-success">@ViewBag.CompletedOrders</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon blue">
+            <i class="bi bi-cash-coin"></i>
+        </div>
+        <div class="stat-details">
+            <h5>Doanh thu hoàn thành</h5>
+            <div class="stat-value text-primary">@(((decimal)ViewBag.TotalRevenue).ToString("N0")) đ</div>
+        </div>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="card-header-custom">
+        <h5 class="card-title-custom">
+            <i class="bi bi-list-stars text-warning"></i> Danh sách Đơn hàng
+        </h5>
+
+        <!-- Filter Status Tabs -->
+        <div class="filter-tabs">
+            @{
+                var statuses = new[] { "Tất cả", "Chờ xác nhận", "Đã xác nhận", "Đang giao", "Đã hoàn thành", "Đã hủy" };
+                foreach (var st in statuses)
+                {
+                    <a asp-action="Index" asp-route-status="@st" asp-route-search="@ViewBag.CurrentSearch"
+                       class="filter-btn @(currentStatus == st ? "active" : "")">
+                        @st
+                    </a>
+                }
+            }
+        </div>
+    </div>
+
+    <!-- Search Bar -->
+    <form method="get" asp-action="Index" class="row g-2 mb-4">
+        <input type="hidden" name="status" value="@currentStatus" />
+        <div class="col-md-5">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Tìm theo tên khách, SĐT hoặc mã đơn..." value="@ViewBag.CurrentSearch" />
+                <button type="submit" class="btn btn-primary-coffee">
+                    <i class="bi bi-search"></i> Tìm kiếm
+                </button>
+            </div>
+        </div>
+        @if (!string.IsNullOrEmpty(ViewBag.CurrentSearch))
+        {
+            <div class="col-auto">
+                <a asp-action="Index" asp-route-status="@currentStatus" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle"></i> Xóa lọc
+                </a>
+            </div>
+        }
+    </form>
+
+    <!-- Orders Table -->
+    <div class="table-responsive table-scrollable">
+        <table class="table-modern">
+            <thead>
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Khách hàng</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ giao</th>
+                    <th>Ngày đặt</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th class="text-end">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="8" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                            Không tìm thấy đơn hàng nào phù hợp.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <strong class="text-dark">#@item.OrderId</strong>
+                            </td>
+                            <td>
+                                <div class="fw-semibold">@item.CustomerName</div>
+                            </td>
+                            <td>
+                                <span>@item.Phone</span>
+                            </td>
+                            <td>
+                                <small class="text-muted d-block text-truncate" style="max-width: 180px;">@item.Address</small>
+                            </td>
+                            <td>
+                                <small class="text-muted">@item.OrderDate.ToString("dd/MM/yyyy HH:mm")</small>
+                            </td>
+                            <td>
+                                <strong class="text-danger">@item.TotalMoney.ToString("N0") VNĐ</strong>
+                            </td>
+                            <td>
+                                @if (item.Status == "Chờ xác nhận")
+                                {
+                                    <span class="badge-status badge-pending"><i class="bi bi-clock"></i> Chờ xác nhận</span>
+                                }
+                                else if (item.Status == "Đã xác nhận")
+                                {
+                                    <span class="badge-status badge-confirmed"><i class="bi bi-check2"></i> Đã xác nhận</span>
+                                }
+                                else if (item.Status == "Đang giao")
+                                {
+                                    <span class="badge-status badge-shipping"><i class="bi bi-truck"></i> Đang giao</span>
+                                }
+                                else if (item.Status == "Đã hoàn thành")
+                                {
+                                    <span class="badge-status badge-completed"><i class="bi bi-check-circle-fill"></i> Đã hoàn thành</span>
+                                }
+                                else
+                                {
+                                    <span class="badge-status badge-cancelled"><i class="bi bi-x-circle-fill"></i> Đã hủy</span>
+                                }
+                            </td>
+                            <td class="text-end">
+                                <div class="d-inline-flex gap-2 align-items-center">
+                                    <!-- Status Update Quick Dropdown -->
+                                    <form asp-action="UpdateStatus" method="post" class="d-inline">
+                                        <input type="hidden" name="orderId" value="@item.OrderId" />
+                                        <select name="status" onchange="this.form.submit()" class="form-select form-select-sm border-secondary-subtle" style="width: 140px; font-size: 12px;">
+                                            <option value="Chờ xác nhận" selected="@(item.Status == "Chờ xác nhận")">Chờ xác nhận</option>
+                                            <option value="Đã xác nhận" selected="@(item.Status == "Đã xác nhận")">Đã xác nhận</option>
+                                            <option value="Đang giao" selected="@(item.Status == "Đang giao")">Đang giao</option>
+                                            <option value="Đã hoàn thành" selected="@(item.Status == "Đã hoàn thành")">Đã hoàn thành</option>
+                                            <option value="Đã hủy" selected="@(item.Status == "Đã hủy")">Đã hủy</option>
+                                        </select>
+                                    </form>
+
+                                    <a asp-action="Details" asp-route-id="@item.OrderId" class="btn-action btn-action-view" title="Xem chi tiết">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+
+                                    <form asp-action="Delete" asp-route-id="@item.OrderId" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa đơn hàng này?');">
+                                        <button type="submit" class="btn-action btn-action-delete" title="Xóa đơn hàng">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

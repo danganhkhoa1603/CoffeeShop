@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Đăng nhập";
 }
 
@@ -6,82 +6,86 @@
 
 <div class="login-page">
 
-    <div class="login-box">
+    <div class="login-card">
 
-       <div class="left-side">
+        <!-- Left Hero Side -->
+        <div class="left-side">
 
-    <img src="~/images/logo.png"
-         class="logo-image"/>
-
-    <h2>Coffee House</h2>
-
-    <p>
-
-        Fresh Coffee Every Day
-
-    </p>
-
-</div>
-
-        <div class="right-side">
-
-            <div class="logo mb-4">
-
-                Đăng nhập
-
+            <div class="brand-header">
+                <img src="~/images/logo.png" alt="Coffee House Logo" class="logo-image" onerror="this.src='https://cdn-icons-png.flaticon.com/512/924/924514.png'" />
+                <h2>Coffee House</h2>
             </div>
 
-            <form method="post">
-
-                <div class="mb-3">
-
-                    <label>Số điện thoại</label>
-
-                    <input type="text"
-                           name="phone"
-                           class="form-control" />
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label>Mật khẩu</label>
-
-                    <input type="password"
-                           name="password"
-                           class="form-control" />
-
-                </div>
-
-                @if (ViewBag.Error != null)
-                {
-                    <div class="alert alert-danger">
-
-                        @ViewBag.Error
-
+            <div class="hero-content">
+                <div class="hero-title">Thưởng thức hương vị nguyên bản</div>
+                <div class="hero-subtitle">Chào mừng bạn quay trở lại với không gian cà phê đậm đà và dịch vụ chu đáo mỗi ngày.</div>
+                
+                <div class="hero-features">
+                    <div class="feature-tag">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Cà phê hạt nguyên chất 100%</span>
                     </div>
-                }
+                    <div class="feature-tag">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Giao hàng nhanh chóng tận nơi</span>
+                    </div>
+                    <div class="feature-tag">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Tích điểm đổi quà ưu đãi</span>
+                    </div>
+                </div>
+            </div>
 
-                <button class="btn-login">
+            <div class="hero-footer">
+                © 2026 Coffee House. Premium Coffee & Bakery.
+            </div>
 
-                    Đăng nhập
+        </div>
 
+        <!-- Right Form Side -->
+        <div class="right-side">
+
+            <div class="form-header">
+                <h3>Đăng nhập</h3>
+                <p>Nhập số điện thoại và mật khẩu của bạn để tiếp tục</p>
+            </div>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert-custom">
+                    <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                    <span>@ViewBag.Error</span>
+                </div>
+            }
+
+            <form method="post" asp-controller="Account" asp-action="Login">
+
+                <div class="input-group-modern">
+                    <label>Số điện thoại</label>
+                    <div class="input-wrapper">
+                        <input type="text" name="phone" class="input-control" placeholder="Nhập số điện thoại (ví dụ: 0909123456)" required />
+                        <i class="bi bi-telephone input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="input-group-modern">
+                    <label>Mật khẩu</label>
+                    <div class="input-wrapper">
+                        <input type="password" name="password" class="input-control" placeholder="Nhập mật khẩu" required />
+                        <i class="bi bi-lock input-icon"></i>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-login">
+                    <span>Đăng nhập ngay</span>
+                    <i class="bi bi-arrow-right-short fs-4"></i>
                 </button>
 
             </form>
 
-            <div class="text-center mt-4">
-
+            <div class="form-footer">
                 Chưa có tài khoản?
-
-                <a asp-controller="Account"
-                   asp-action="Register"
-                   class="link">
-
-                    Đăng ký ngay
-
-                </a>
-
+                <a asp-controller="Account" asp-action="Register">Đăng ký ngay</a>
             </div>
 
         </div>

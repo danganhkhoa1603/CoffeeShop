@@ -1,4 +1,4 @@
-﻿using CoffeeShop.Data;
+using CoffeeShop.Data;
 using CoffeeShop.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -62,17 +62,12 @@ namespace CoffeeShop.Controllers
             HttpContext.Session.SetInt32("UserId", user.UserId);
             HttpContext.Session.SetString("UserName", user.FullName);
             HttpContext.Session.SetString("Phone", user.Phone);
-            HttpContext.Session.SetString("Address", user.Address);
+            HttpContext.Session.SetString("Address", user.Address ?? "");
             HttpContext.Session.SetString("Role", user.Role);
 
-            if (user.Role == "Admin")
+            if (user.Role == "Admin" || user.Role == "Employee")
             {
                 return RedirectToAction("Index", "AdminProduct");
-            }
-
-            if (user.Role == "Employee")
-            {
-                return RedirectToAction("Index", "Employee");
             }
 
             return RedirectToAction("Index", "Home");
@@ -113,7 +108,7 @@ namespace CoffeeShop.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         // ================= CHỌN VAI TRÒ =================

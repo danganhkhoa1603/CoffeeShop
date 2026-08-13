@@ -1,68 +1,77 @@
-﻿@model List<CoffeeShop.Models.User>
-
+@model List<CoffeeShop.Models.User>
 @{
+    ViewData["Title"] = "Quản lý Nhân viên";
     Layout = "_AdminLayout";
 }
 
-<div class="container mt-5">
-
-    <h2>👨‍💼 Quản lý nhân viên</h2>
-
-    <a asp-action="Create"
-       class="btn btn-success mb-3">
-
-        + Thêm nhân viên
-
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="fw-bold mb-1">👨‍💼 Quản lý Nhân viên</h4>
+        <p class="text-muted small mb-0">Quản lý danh sách tài khoản và phân quyền nhân viên phục vụ</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary-coffee">
+        <i class="bi bi-person-plus-fill"></i> Thêm nhân viên mới
     </a>
+</div>
 
-    <table class="table table-bordered">
-
-        <thead class="table-dark">
-
-            <tr>
-                <th>Họ tên</th>
-                <th>SĐT</th>
-                <th>Địa chỉ</th>
-                <th></th>
-            </tr>
-
-        </thead>
-
-        <tbody>
-
-            @foreach (var item in Model)
-            {
+<div class="admin-card">
+    <div class="table-responsive table-scrollable">
+        <table class="table-modern">
+            <thead>
                 <tr>
-
-                    <td>@item.FullName</td>
-                    <td>@item.Phone</td>
-                    <td>@item.Address</td>
-
-                    <td>
-
-                        <a asp-action="Edit"
-                           asp-route-id="@item.UserId"
-                           class="btn btn-warning">
-
-                            Sửa
-
-                        </a>
-
-                        <a asp-action="Delete"
-                           asp-route-id="@item.UserId"
-                           class="btn btn-danger">
-
-                            Xóa
-
-                        </a>
-
-                    </td>
-
+                    <th>Họ và tên</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th>Ngày tạo</th>
+                    <th class="text-end">Thao tác</th>
                 </tr>
-            }
-
-        </tbody>
-
-    </table>
-
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="5" class="text-center py-5 text-muted">
+                            <i class="bi bi-person-slash fs-1 d-block mb-2"></i>
+                            Chưa có nhân viên nào.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="user-avatar">
+                                        @item.FullName.Substring(0, 1).ToUpper()
+                                    </div>
+                                    <div>
+                                        <strong class="text-dark">@item.FullName</strong>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span><i class="bi bi-telephone text-muted me-1"></i> @item.Phone</span>
+                            </td>
+                            <td>
+                                <small class="text-muted">@(string.IsNullOrEmpty(item.Address) ? "Chưa cập nhật" : item.Address)</small>
+                            </td>
+                            <td>
+                                <small class="text-muted">@item.CreatedDate.ToString("dd/MM/yyyy")</small>
+                            </td>
+                            <td class="text-end">
+                                <a asp-action="Edit" asp-route-id="@item.UserId" class="btn-action btn-action-edit me-1" title="Sửa nhân viên">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.UserId" class="btn-action btn-action-delete" title="Xóa nhân viên">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 </div>

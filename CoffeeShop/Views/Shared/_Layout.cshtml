@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http
 @inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShop.Resources.SharedResource> Localizer
 
 @{
@@ -123,9 +123,9 @@
 
                                 @if (Context.Session.GetString("Role") == "Admin")
                                 {
-                                    <li><a class="dropdown-item" asp-controller="Admin" asp-action="Index">👑 @Localizer["AdminDashboard"]</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">☕ @Localizer["ManageProducts"]</a></li>
-                                    <li><a class="dropdown-item" asp-controller="AdminOrder" asp-action="Index">📦 @Localizer["ManageOrders"]</a></li>
+                                    <li><a class="dropdown-item" asp-controller="AdminProduct" asp-action="Index">👑 Bảng điều khiển Admin</a></li>
+                                    <li><a class="dropdown-item" asp-controller="AdminProduct" asp-action="Index">☕ Quản lý sản phẩm</a></li>
+                                    <li><a class="dropdown-item" asp-controller="AdminOrder" asp-action="Index">📦 Quản lý đơn hàng</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                 }
 

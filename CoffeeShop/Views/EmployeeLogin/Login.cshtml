@@ -1,87 +1,104 @@
-﻿@{
-    ViewData["Title"] = "Đăng nhập";
+@{
+    ViewData["Title"] = "Đăng nhập Nhân viên";
 }
 
 <link rel="stylesheet" href="~/css/login.css" />
 
 <div class="login-page">
 
-    <div class="login-box">
+    <div class="login-card">
 
+        <!-- Left Hero Side -->
         <div class="left-side">
 
-            <img src="~/images/logo.png"
-                 class="logo-image" />
+            <div class="brand-header">
+                <img src="~/images/logo.png" alt="Coffee House Logo" class="logo-image" onerror="this.src='https://cdn-icons-png.flaticon.com/512/924/924514.png'" />
+                <h2>Coffee Staff</h2>
+            </div>
 
-            <h2>Coffee House</h2>
+            <div class="hero-content">
+                <div class="hero-title">Cổng thông tin Nhân viên</div>
+                <div class="hero-subtitle">Đăng nhập tài khoản nhân viên để tiếp nhận đơn hàng, phục vụ khách hàng và cập nhật ca làm việc.</div>
+                
+                <div class="hero-features">
+                    <div class="feature-tag">
+                        <i class="bi bi-receipt"></i>
+                        <span>Xử lý đơn hàng nhanh chóng</span>
+                    </div>
+                    <div class="feature-tag">
+                        <i class="bi bi-clock-history"></i>
+                        <span>Cập nhật trạng thái đơn hàng</span>
+                    </div>
+                    <div class="feature-tag">
+                        <i class="bi bi-cup-hot"></i>
+                        <span>Quản lý danh sách đồ uống</span>
+                    </div>
+                </div>
+            </div>
 
-            <p>
-
-                Fresh Coffee Every Day
-
-            </p>
+            <div class="hero-footer">
+                © 2026 Coffee House. Staff Portal.
+            </div>
 
         </div>
 
+        <!-- Right Form Side -->
         <div class="right-side">
 
-            <div class="logo mb-4">
-
-                Đăng nhập
-
+            <!-- Role Selector Tabs -->
+            <div class="role-tabs">
+                <a asp-controller="Account" asp-action="Login" class="role-tab">
+                    <i class="bi bi-person-heart"></i> Khách hàng
+                </a>
+                <a asp-controller="EmployeeLogin" asp-action="Login" class="role-tab active">
+                    <i class="bi bi-person-badge"></i> Nhân viên
+                </a>
+                <a asp-controller="AdminLogin" asp-action="Login" class="role-tab">
+                    <i class="bi bi-shield-lock"></i> Quản trị viên
+                </a>
             </div>
 
-            <form method="post">
+            <div class="form-header">
+                <h3>Đăng nhập Nhân viên</h3>
+                <p>Nhập số điện thoại và mật khẩu tài khoản nhân viên</p>
+            </div>
 
-                <div class="mb-3">
-
-                    <label>Số điện thoại</label>
-
-                    <input type="text"
-                           name="phone"
-                           class="form-control" />
-
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert-custom">
+                    <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                    <span>@ViewBag.Error</span>
                 </div>
+            }
 
-                <div class="mb-3">
+            <form method="post" asp-controller="EmployeeLogin" asp-action="Login">
 
-                    <label>Mật khẩu</label>
-
-                    <input type="password"
-                           name="password"
-                           class="form-control" />
-
-                </div>
-
-                @if (ViewBag.Error != null)
-                {
-                    <div class="alert alert-danger">
-
-                        @ViewBag.Error
-
+                <div class="input-group-modern">
+                    <label>Số điện thoại nhân viên</label>
+                    <div class="input-wrapper">
+                        <input type="text" name="phone" class="input-control" placeholder="Nhập SĐT nhân viên" required />
+                        <i class="bi bi-telephone input-icon"></i>
                     </div>
-                }
+                </div>
 
-                <button class="btn-login">
+                <div class="input-group-modern">
+                    <label>Mật khẩu</label>
+                    <div class="input-wrapper">
+                        <input type="password" name="password" class="input-control" placeholder="Nhập mật khẩu" required />
+                        <i class="bi bi-lock input-icon"></i>
+                    </div>
+                </div>
 
-                    Đăng nhập
-
+                <button type="submit" class="btn-login">
+                    <span>Đăng nhập Nhân viên</span>
+                    <i class="bi bi-arrow-right-short fs-4"></i>
                 </button>
 
             </form>
 
-            <div class="text-center mt-4">
-
-                Chưa có tài khoản?
-
-                <a asp-controller="Account"
-                   asp-action="Register"
-                   class="link">
-
-                    Đăng ký ngay
-
-                </a>
-
+            <div class="form-footer">
+                Về trang chủ?
+                <a asp-controller="Home" asp-action="Index">Coffee House Website</a>
             </div>
 
         </div>

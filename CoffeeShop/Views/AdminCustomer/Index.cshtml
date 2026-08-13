@@ -1,0 +1,112 @@
+@model IEnumerable<CoffeeShop.Models.User>
+@{
+    ViewData["Title"] = "Quản lý Khách hàng";
+    Layout = "_AdminLayout";
+    var orderCounts = ViewBag.OrderCounts as Dictionary<int, dynamic>;
+}
+
+<!-- Stat Card -->
+<div class="stat-grid mb-4">
+    <div class="stat-card">
+        <div class="stat-icon blue">
+            <i class="bi bi-people-fill"></i>
+        </div>
+        <div class="stat-details">
+            <h5>Tổng số Khách hàng</h5>
+            <div class="stat-value">@ViewBag.TotalCustomers</div>
+        </div>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="card-header-custom">
+        <h5 class="card-title-custom">
+            <i class="bi bi-person-lines-fill text-primary"></i> Danh sách Khách hàng
+        </h5>
+
+        <!-- Search Bar -->
+        <form method="get" asp-action="Index" class="d-flex gap-2">
+            <input type="text" name="search" class="form-control form-control-sm" placeholder="Tìm theo tên, SĐT..." value="@ViewBag.CurrentSearch" style="width: 250px;" />
+            <button type="submit" class="btn btn-primary-coffee btn-sm">
+                <i class="bi bi-search"></i> Tìm
+            </button>
+            @if (!string.IsNullOrEmpty(ViewBag.CurrentSearch))
+            {
+                <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-x-circle"></i> Xóa
+                </a>
+            }
+        </form>
+    </div>
+
+    <div class="table-responsive table-scrollable">
+        <table class="table-modern">
+            <thead>
+                <tr>
+                    <th>Khách hàng</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th>Ngày tham gia</th>
+                    <th class="text-center">Số đơn đã đặt</th>
+                    <th class="text-end">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            <i class="bi bi-person-x fs-1 d-block mb-2"></i>
+                            Chưa có khách hàng nào trong hệ thống.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        int orderCount = 0;
+                        if (orderCounts != null && orderCounts.ContainsKey(item.UserId))
+                        {
+                            orderCount = orderCounts[item.UserId].Count;
+                        }
+
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="user-avatar bg-secondary">
+                                        @item.FullName.Substring(0, 1).ToUpper()
+                                    </div>
+                                    <div>
+                                        <strong class="text-dark">@item.FullName</strong>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span><i class="bi bi-telephone text-muted me-1"></i> @item.Phone</span>
+                            </td>
+                            <td>
+                                <small class="text-muted">@(string.IsNullOrEmpty(item.Address) ? "Chưa cập nhật" : item.Address)</small>
+                            </td>
+                            <td>
+                                <small class="text-muted">@item.CreatedDate.ToString("dd/MM/yyyy")</small>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-bold">
+                                    <i class="bi bi-bag-check text-success me-1"></i> @orderCount đơn
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                <form asp-action="Delete" asp-route-id="@item.UserId" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa tài khoản khách hàng này?');">
+                                    <button type="submit" class="btn-action btn-action-delete" title="Xóa tài khoản">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
