@@ -1,40 +1,66 @@
-﻿@model CoffeeShop.Models.Product
+﻿@using CoffeeShop.Models
 
-<div class="container mt-5">
+@model Product
 
-    <div class="row">
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
 
-        <div class="col-md-6">
+    var related = ViewBag.RelatedProducts as List<Product>;
+}
 
-            <img src="~/uploads/@Model.Image"
-                 class="img-fluid product-image" />
-                 class="img-fluid rounded shadow" />
+<div class="container py-5">
+
+    <div class="row g-5 align-items-center">
+
+        <!-- IMAGE -->
+
+        <div class="col-lg-6">
+
+            <div class="detail-image">
+
+                <img src="~/uploads/@Model.Image"
+                     class="img-fluid rounded shadow product-image"
+                     alt="@Model.ProductName">
+
+            </div>
 
         </div>
 
-        <div class="col-md-6">
+        <!-- INFO -->
 
-            <h2 class="fw-bold">
+        <div class="col-lg-6">
+
+            <span class="badge bg-success mb-3">
+
+                Coffee House
+
+            </span>
+
+            <h2 class="fw-bold mb-3">
 
                 @Model.ProductName
 
             </h2>
 
-            <div class="text-warning fs-4">
+            <div class="text-warning fs-4 mb-3">
 
                 ★★★★★
 
+                <span class="text-muted fs-6">
+
+                    (125 đánh giá)
+
+                </span>
+
             </div>
 
-            <h3 class="text-danger mt-3">
+            <h2 class="text-danger fw-bold mb-4">
 
                 @Model.Price.ToString("N0") VNĐ
 
-            </h3>
+            </h2>
 
-            <hr />
-
-            <p>
+            <p class="text-muted">
 
                 @Model.Description
 
@@ -44,23 +70,32 @@
 
                 <strong>Tồn kho:</strong>
 
-                @Model.Stock
+                @Model.Stock sản phẩm
 
             </p>
 
+            <hr>
+
+            <!-- QUANTITY -->
+
             <div class="d-flex align-items-center mb-4">
 
-                <button class="btn btn-outline-secondary">
+                <button type="button"
+                        class="btn btn-outline-secondary"
+                        onclick="minus()">
 
                     -
 
                 </button>
 
-                <input value="1"
-                       class="form-control text-center mx-2"
-                       style="width:70px" />
+                <input id="qty"
+                       value="1"
+                       readonly
+                       class="form-control text-center mx-2 quantity">
 
-                <button class="btn btn-outline-secondary">
+                <button type="button"
+                        class="btn btn-outline-secondary"
+                        onclick="plus(@Model.Stock)">
 
                     +
 
@@ -68,12 +103,24 @@
 
             </div>
 
-            <a asp-controller="Cart"
-               asp-action="AddToCart"
-               asp-route-id="@Model.ProductId"
-               class="btn btn-primary btn-lg">
+            <!-- BUTTON -->
+
+            <a id="cartBtn"
+                   asp-controller="Cart"
+                   asp-action="AddToCart"
+                   asp-route-id="@Model.ProductId"
+                   asp-route-quantity="1"
+                   class="btn btn-coffee btn-lg me-3">
 
                 🛒 Thêm vào giỏ
+
+            </a>
+
+            <a asp-controller="Home"
+                   asp-action="Index"
+                   class="btn btn-outline-secondary btn-lg">
+
+                ← Tiếp tục mua
 
             </a>
 
@@ -81,4 +128,99 @@
 
     </div>
 
+    <!-- RELATED -->
+
+    <hr class="my-5">
+
+    <h3 class="text-center fw-bold mb-5">
+
+        Có thể bạn cũng thích
+
+    </h3>
+
+    <div class="row">
+
+        @if (related != null)
+        {
+            @foreach (var item in related)
+            {
+                <div class="col-lg-3 col-md-6 mb-4">
+
+                    <div class="card product-card h-100 shadow-sm">
+
+                        <img src="~/uploads/@item.Image"
+                             class="product-image">
+
+                        <div class="card-body text-center">
+
+                            <h5 class="fw-bold">
+
+                                @item.ProductName
+
+                            </h5>
+
+                            <p class="text-danger fw-bold">
+
+                                @item.Price.ToString("N0") VNĐ
+
+                            </p>
+
+                            <a asp-controller="Product"
+                                   asp-action="Details"
+                                   asp-route-id="@item.ProductId"
+                                   class="btn btn-coffee">
+
+                                Xem chi tiết
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+        }
+
+    </div>
+
 </div>
+
+<script>
+
+    let qty = 1;
+
+    function plus(stock){
+
+        if(qty < stock){
+
+            qty++;
+
+            updateQty();
+
+        }
+
+    }
+
+    function minus(){
+
+        if(qty > 1){
+
+            qty--;
+
+            updateQty();
+
+        }
+
+    }
+
+    function updateQty(){
+
+        document.getElementById("qty").value = qty;
+
+        document.getElementById("cartBtn").href =
+            "/Cart/AddToCart?id=@Model.ProductId&quantity=" + qty;
+
+    }
+
+</script>

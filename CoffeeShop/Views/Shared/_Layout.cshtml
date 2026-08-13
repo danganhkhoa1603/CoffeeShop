@@ -104,7 +104,7 @@
                     @if (Context.Session.GetString("UserName") == null)
                     {
                         <a asp-controller="Account"
-                               asp-action="ChooseRole"
+                               asp-action="Login"
                                class="text-dark me-3">
                             <i class="bi bi-person fs-5"></i>
                         </a>
@@ -129,11 +129,78 @@
                                     <li><hr class="dropdown-divider"></li>
                                 }
 
-                                @if (Context.Session.GetString("Role") == "Employee")
+                                @if (Context.Session.GetString("Role") == "Customer")
                                 {
-                                    <li><a class="dropdown-item" asp-controller="Employee" asp-action="Index">👨‍💼 @Localizer["EmployeeDashboard"]</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">☕ @Localizer["ManageProducts"]</a></li>
-                                    <li><a class="dropdown-item" asp-controller="AdminOrder" asp-action="Index">📦 @Localizer["ManageOrders"]</a></li>
+                                    <li class="dropdown-header text-center">
+
+                                        <i class="bi bi-person-circle fs-1 text-secondary"></i>
+
+                                        <div class="fw-bold mt-2">
+                                            @Context.Session.GetString("UserName")
+                                        </div>
+
+                                        <small class="text-muted">
+                                            Khách hàng
+                                        </small>
+
+                                    </li>
+
+                                    <li><hr class="dropdown-divider"></li>
+
+                                    <li>
+
+                                        <span class="dropdown-item-text">
+
+                                            <i class="bi bi-geo-alt"></i>
+
+                                            @Context.Session.GetString("Address")
+
+                                        </span>
+
+                                    </li>
+
+                                    <li>
+
+                                        <span class="dropdown-item-text">
+
+                                            <i class="bi bi-telephone"></i>
+
+                                            @Context.Session.GetString("Phone")
+
+                                        </span>
+
+                                    </li>
+
+                                    <li><hr class="dropdown-divider"></li>
+
+                                    <li>
+
+                                        <a class="dropdown-item"
+                                               asp-controller="Cart"
+                                               asp-action="Index">
+
+                                            <i class="bi bi-cart"></i>
+
+                                            Giỏ hàng của tôi
+
+                                        </a>
+
+                                    </li>
+
+                                    <li>
+
+                                        <a class="dropdown-item"
+                                               asp-controller="Order"
+                                               asp-action="History">
+
+                                            <i class="bi bi-bag-check"></i>
+
+                                            Lịch sử mua hàng
+
+                                        </a>
+
+                                    </li>
+
                                     <li><hr class="dropdown-divider"></li>
                                 }
 
@@ -154,44 +221,7 @@
                             </ul>
 
                         </div>
-                    }
-
-                    <!-- LANGUAGE -->
-                    <div class="dropdown me-3">
-
-                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
-                                type="button"
-                                data-bs-toggle="dropdown">
-
-                            🌐 @(System.Globalization.CultureInfo.CurrentCulture.Name.StartsWith("vi") ? "VI" : "EN")
-
-                        </button>
-
-                        <ul class="dropdown-menu dropdown-menu-end">
-
-                            <li>
-                                <a class="dropdown-item"
-                                       asp-controller="Language"
-                                       asp-action="SetLanguage"
-                                       asp-route-culture="vi"
-                                       asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString">
-                                    🇻🇳 Tiếng Việt
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item"
-                                       asp-controller="Language"
-                                       asp-action="SetLanguage"
-                                       asp-route-culture="en"
-                                       asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString">
-                                    🇬🇧 English
-                                </a>
-                            </li>
-
-                        </ul>
-
-                    </div>
+                    } 
 
                     <!-- CART -->
                     <a asp-controller="Cart"

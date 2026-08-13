@@ -25,14 +25,21 @@ namespace CoffeeShop.Controllers
         }
 
         //Chi tiết sản phẩm
-        public async Task<IActionResult> Details(int id)
+        public IActionResult Details(int id)
         {
-            var product = await _context.Products
-                .Include(p => p.Category)
-                .FirstOrDefaultAsync(p => p.ProductId == id);
+            var product = _context.Products
+                                  .FirstOrDefault(p => p.ProductId == id);
 
             if (product == null)
+            {
                 return NotFound();
+            }
+
+            ViewBag.RelatedProducts = _context.Products
+                .Where(p => p.CategoryId == product.CategoryId &&
+                            p.ProductId != product.ProductId)
+                .Take(4)
+                .ToList();
 
             return View(product);
         }

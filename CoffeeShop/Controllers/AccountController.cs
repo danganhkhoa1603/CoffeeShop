@@ -1,8 +1,8 @@
 ﻿using CoffeeShop.Data;
 using CoffeeShop.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
 namespace CoffeeShop.Controllers
 {
     public class AccountController : Controller
@@ -39,7 +39,7 @@ namespace CoffeeShop.Controllers
             return RedirectToAction("Login");
         }
 
-        // ================= ĐĂNG NHẬP =================
+        // ================= ĐĂNG NHẬP KHÁCH HÀNG =================
 
         public IActionResult Login()
         {
@@ -61,6 +61,8 @@ namespace CoffeeShop.Controllers
 
             HttpContext.Session.SetInt32("UserId", user.UserId);
             HttpContext.Session.SetString("UserName", user.FullName);
+            HttpContext.Session.SetString("Phone", user.Phone);
+            HttpContext.Session.SetString("Address", user.Address);
             HttpContext.Session.SetString("Role", user.Role);
 
             if (user.Role == "Admin")
@@ -74,11 +76,10 @@ namespace CoffeeShop.Controllers
             }
 
             return RedirectToAction("Index", "Home");
-
-            return RedirectToAction("Index", "Home");
         }
 
-        // ================= ĐĂNG XUẤT =================
+        // ================= ĐĂNG NHẬP NHÂN VIÊN =================
+
         public IActionResult EmployeeLogin()
         {
             return View();
@@ -100,16 +101,23 @@ namespace CoffeeShop.Controllers
 
             HttpContext.Session.SetInt32("UserId", employee.UserId);
             HttpContext.Session.SetString("UserName", employee.FullName);
+            HttpContext.Session.SetString("Phone", employee.Phone);
+            HttpContext.Session.SetString("Address", employee.Address);
             HttpContext.Session.SetString("Role", employee.Role);
 
             return RedirectToAction("Index", "Employee");
         }
+
+        // ================= ĐĂNG XUẤT =================
+
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
-
             return RedirectToAction("Index", "Home");
         }
+
+        // ================= CHỌN VAI TRÒ =================
+
         public IActionResult ChooseRole()
         {
             return View();
