@@ -154,6 +154,19 @@
                                     <li><a class="dropdown-item" asp-controller="AdminProduct" asp-action="Index">👑 Bảng điều khiển Admin</a></li>
                                     <li><a class="dropdown-item" asp-controller="AdminProduct" asp-action="Index">☕ Quản lý sản phẩm</a></li>
                                     <li><a class="dropdown-item" asp-controller="AdminOrder" asp-action="Index">📦 Quản lý đơn hàng</a></li>
+                                    <li>
+
+                                        <a class="dropdown-item"
+                                           asp-controller="Cart"
+                                           asp-action="Index">
+
+                                            <i class="bi bi-cart"></i>
+
+                                            Giỏ hàng của tôi
+
+                                        </a>
+
+                                    </li>
                                     <li><hr class="dropdown-divider"></li>
                                 }
 
@@ -308,11 +321,7 @@
 
                                     <li><hr class="dropdown-divider"></li>
                                 }
-                                @if (Context.Session.GetString("Role") == "Customer")
-                                {
-                                    <li><a class="dropdown-item" asp-controller="Order" asp-action="History">📦 @Localizer["MyOrders"]</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                }
+                               
 
                                 <li>
                                     <a class="dropdown-item"
