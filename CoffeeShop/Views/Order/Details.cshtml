@@ -1,0 +1,128 @@
+﻿@model CoffeeShop.ViewModels.OrderDetailsViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="container py-5">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-dark text-white">
+
+            <h3>🧾 Chi tiết đơn hàng #@Model.Order.OrderId</h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row mb-4">
+
+                <div class="col-md-4">
+                    <strong>Ngày đặt:</strong>
+                    @Model.Order.OrderDate.ToString("dd/MM/yyyy HH:mm")
+                </div>
+
+                <div class="col-md-4">
+                    <strong>Trạng thái:</strong>
+                    <span class="badge bg-success">
+                        @Model.Order.Status
+                    </span>
+                </div>
+
+                <div class="col-md-4 text-end">
+                    <strong>Tổng tiền:</strong>
+                    <span class="text-danger fw-bold">
+                        @Model.Order.TotalMoney.ToString("N0") VNĐ
+                    </span>
+                </div>
+
+            </div>
+            <table class="table align-middle">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>Ảnh</th>
+                        <th>Sản phẩm</th>
+                        <th>SL</th>
+                        <th>Đơn giá</th>
+                        <th>Thành tiền</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model.OrderDetails)
+                    {
+                        <tr>
+
+                            <td width="120">
+
+                                <img src="~/uploads/@item.Product.Image"
+                                     width="90"
+                                     class="rounded shadow" />
+
+                            </td>
+
+                            <td>
+
+                                @item.Product.ProductName
+
+                            </td>
+
+                            <td>
+
+                                @item.Quantity
+
+                            </td>
+
+                            <td>
+
+                                @item.Price.ToString("N0") VNĐ
+
+                            </td>
+
+                            <td class="text-danger fw-bold">
+
+                                @((item.Price * item.Quantity).ToString("N0")) VNĐ
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+            <div class="text-end">
+
+                <h4>
+
+                    Tổng cộng:
+
+                    <span class="text-danger">
+
+                        @Model.Order.TotalMoney.ToString("N0") VNĐ
+
+                    </span>
+
+                </h4>
+
+            </div>
+
+            <a asp-action="History"
+                   class="btn btn-secondary mt-3">
+
+                ← Quay lại
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

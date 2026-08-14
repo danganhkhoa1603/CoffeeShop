@@ -1,0 +1,89 @@
+﻿@model IEnumerable<Coffee.Models.Contact>
+
+@{
+    ViewData["Title"] = "Quản lý liên hệ";
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">
+        Danh sách yêu cầu hỗ trợ
+    </h2>
+
+    <table class="table table-bordered table-hover align-middle">
+
+        <thead class="table-dark">
+
+            <tr>
+
+                <th width="60">#</th>
+
+                <th>Họ tên</th>
+
+                <th>Email</th>
+
+                <th>Số điện thoại</th>
+
+                <th>Nội dung</th>
+
+                <th>Ngày gửi</th>
+
+                <th>Trạng thái</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @{
+                int stt = 1;
+            }
+
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>@stt</td>
+
+                    <td>@item.FullName</td>
+
+                    <td>@item.Email</td>
+
+                    <td>@item.Phone</td>
+
+                    <td style="max-width:350px;white-space:normal">
+                        @item.Message
+                    </td>
+
+                    <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+
+                    <td>
+
+                        @if (item.IsRead)
+                        {
+                            <span class="badge bg-success">
+                                Đã xem
+                            </span>
+                            <th>Thao tác</th>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">
+                                Chưa xem
+                            </span>
+                            <th>Thao tác</th>
+                        }
+
+                    </td>
+
+                </tr>
+
+                stt++;
+            }
+
+        </tbody>
+
+    </table>
+
+</div>

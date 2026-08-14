@@ -25,5 +25,6 @@ namespace CoffeeShop.Models
         public decimal TotalMoney { get; set; }
 
         public string? Status { get; set; }
+        public ICollection<OrderDetail>? OrderDetails { get; set; }
     }
 }

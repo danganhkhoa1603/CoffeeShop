@@ -1,38 +1,35 @@
-﻿@{
+﻿@model Coffee.Models.Contact
+
+@{
     ViewData["Title"] = "Liên hệ";
 }
+
 <script>
-
     const branches = [
-
-    {
-        name:"Chi nhánh Quận 1",
-        address:"📍123 Nguyễn Huệ, Quận 1",
-        phone:"☎ 0938 282 070",
-        time:"🕒 07:00 - 22:00",
-        image:"/uploads/store1.jpg"
-    },
-
-    {
-        name:"Chi nhánh Bình Thạnh",
-        address:"📍88 Điện Biên Phủ",
-        phone:"☎ 0908 888 888",
-        time:"🕒 07:00 - 22:00",
-        image:"/uploads/store2.jpg"
-    },
-
-    {
-        name:"Chi nhánh Thủ Đức",
-        address:"📍25 Phạm Trần Kim Ngân",
-        phone:"☎ 0907 777 777",
-        time:"🕒 07:00 - 22:00",
-        image:"/uploads/store3.jpg"
-    }
-
+        {
+            name: "Chi nhánh Quận 1",
+            address: "📍123 Nguyễn Huệ, Quận 1",
+            phone: "☎ 0938 282 070",
+            time: "🕒 07:00 - 22:00",
+            image: "/uploads/store1.jpg"
+        },
+        {
+            name: "Chi nhánh Bình Thạnh",
+            address: "📍88 Điện Biên Phủ",
+            phone: "☎ 0908 888 888",
+            time: "🕒 07:00 - 22:00",
+            image: "/uploads/store2.jpg"
+        },
+        {
+            name: "Chi nhánh Thủ Đức",
+            address: "📍25 Phạm Trần Kim Ngân",
+            phone: "☎ 0907 777 777",
+            time: "🕒 07:00 - 22:00",
+            image: "/uploads/store3.jpg"
+        }
     ];
 
     function changeBranch(index) {
-
         index = parseInt(index);
 
         document.getElementById("branchImg").src = branches[index].image;
@@ -40,164 +37,108 @@
         document.getElementById("branchAddress").innerHTML = branches[index].address;
         document.getElementById("branchPhone").innerHTML = branches[index].phone;
         document.getElementById("branchTime").innerHTML = branches[index].time;
-
     }
-
 </script>
+
 <!-- HERO -->
 <section class="contact-header">
-
     <div class="overlay">
-
         <div class="container text-center">
-
             <h1>Liên Hệ Với Chúng Tôi</h1>
-
-            <p>
-                Coffee House luôn sẵn sàng lắng nghe và hỗ trợ bạn.
-            </p>
-
+            <p>Coffee House luôn sẵn sàng lắng nghe và hỗ trợ bạn.</p>
         </div>
-
     </div>
-
 </section>
 
 <!-- CONTACT -->
-
 <section class="container py-5">
-
     <div class="row g-4">
 
         <!-- FORM -->
-
         <div class="col-lg-7">
-
             <div class="contact-card">
 
-                <h3 class="mb-4">
+                <h3 class="mb-4">Gửi Tin Nhắn</h3>
 
-                    Gửi Tin Nhắn
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success">
+                        @TempData["Success"]
+                    </div>
+                }
 
-                </h3>
-
-                <form>
+                <form asp-controller="Contact"
+                      asp-action="Contact"
+                      method="post">
 
                     <div class="row">
 
                         <div class="col-md-6">
-
-                            <input class="form-control mb-3"
-                                   placeholder="Họ và tên">
-
+                            <input asp-for="FullName"
+                                   class="form-control mb-3"
+                                   placeholder="Họ và tên" />
                         </div>
 
                         <div class="col-md-6">
-
-                            <input class="form-control mb-3"
-                                   placeholder="Email">
-
+                            <input asp-for="Email"
+                                   class="form-control mb-3"
+                                   placeholder="Email" />
                         </div>
 
                     </div>
 
-                    <input class="form-control mb-3"
-                           placeholder="Số điện thoại">
+                    <input asp-for="Phone"
+                           class="form-control mb-3"
+                           placeholder="Số điện thoại" />
 
-                    <textarea rows="6"
+                    <textarea asp-for="Message"
+                              rows="6"
                               class="form-control mb-4"
                               placeholder="Nội dung cần hỗ trợ"></textarea>
 
-                    <button class="btn btn-coffee">
-
+                    <button type="submit" class="btn btn-coffee">
                         Gửi Liên Hệ
-
                     </button>
 
                 </form>
 
             </div>
-
         </div>
 
         <!-- INFO -->
-
         <div class="col-lg-5">
-
             <div class="contact-info">
 
-                <h3 class="mb-4">
+                <h3 class="mb-4">Thông Tin Hỗ Trợ</h3>
 
-                    Thông Tin Hỗ Trợ
-
-                </h3>
-
-                <p>
-
-                    📍 123 Nguyễn Huệ, Quận 1, TP.HCM
-
-                </p>
-
-                <p>
-
-                    ☎ 0938 282 070
-
-                </p>
-
-                <p>
-
-                    ✉ coffeeshop@gmail.com
-
-                </p>
-
-                <p>
-
-                    🕒 07:00 - 22:00
-
-                </p>
-
-                <p>
-
-                    🌐 Facebook: Coffee House
-
-                </p>
+                <p>📍123 Nguyễn Huệ, Quận 1, TP.HCM</p>
+                <p>☎ 0938 282 070</p>
+                <p>✉ coffeeshop@gmail.com</p>
+                <p>🕒 07:00 - 22:00</p>
+                <p>🌐 Facebook: Coffee House</p>
 
                 <hr>
 
-                <h5>
-
-                    Theo dõi chúng tôi
-
-                </h5>
+                <h5>Theo dõi chúng tôi</h5>
 
                 <div class="social">
-
                     <i class="bi bi-facebook"></i>
-
                     <i class="bi bi-instagram"></i>
-
                     <i class="bi bi-youtube"></i>
-
                     <i class="bi bi-tiktok"></i>
-
                 </div>
 
             </div>
-
         </div>
 
     </div>
-
 </section>
 
-<!-- MAP -->
-
+<!-- CHI NHÁNH -->
 <section class="container mb-5">
 
     <h2 class="text-center fw-bold mb-4">
-
         🏪 Hệ Thống Chi Nhánh
-
     </h2>
 
     <div class="row justify-content-center">
@@ -207,17 +148,9 @@
             <select class="form-select form-select-lg mb-4"
                     onchange="changeBranch(this.value)">
 
-                <option value="0">
-                    Quận 1
-                </option>
-
-                <option value="1">
-                    Bình Thạnh
-                </option>
-
-                <option value="2">
-                    Thủ Đức
-                </option>
+                <option value="0">Quận 1</option>
+                <option value="1">Bình Thạnh</option>
+                <option value="2">Thủ Đức</option>
 
             </select>
 
@@ -230,25 +163,17 @@
         <img id="branchImg"
              src="~/uploads/store1.jpg"
              class="branch-photo"
-             alt="Chi nhánh Coffee House">
+             alt="Chi nhánh">
 
         <div class="branch-info">
 
-            <h3 id="branchName">
-                Chi nhánh Quận 1
-            </h3>
+            <h3 id="branchName">Chi nhánh Quận 1</h3>
 
-            <p id="branchAddress">
-                📍123 Nguyễn Huệ, Quận 1
-            </p>
+            <p id="branchAddress">📍123 Nguyễn Huệ, Quận 1</p>
 
-            <p id="branchPhone">
-                ☎ 0938 282 070
-            </p>
+            <p id="branchPhone">☎0938 282 070</p>
 
-            <p id="branchTime">
-                🕒 07:00 - 22:00
-            </p>
+            <p id="branchTime">🕒07:00 - 22:00</p>
 
         </div>
 
@@ -257,13 +182,10 @@
 </section>
 
 <!-- FAQ -->
-
 <section class="container mb-5">
 
     <h2 class="text-center mb-5">
-
         Câu Hỏi Thường Gặp
-
     </h2>
 
     <div class="accordion" id="faq">
@@ -287,9 +209,7 @@
                  data-bs-parent="#faq">
 
                 <div class="accordion-body">
-
                     Có. Chúng tôi hỗ trợ giao hàng toàn quốc.
-
                 </div>
 
             </div>
@@ -315,9 +235,7 @@
                  data-bs-parent="#faq">
 
                 <div class="accordion-body">
-
                     Từ 07:00 đến 22:00 mỗi ngày.
-
                 </div>
 
             </div>
@@ -343,9 +261,7 @@
                  data-bs-parent="#faq">
 
                 <div class="accordion-body">
-
                     Có. Hỗ trợ VNPay, MoMo và chuyển khoản.
-
                 </div>
 
             </div>

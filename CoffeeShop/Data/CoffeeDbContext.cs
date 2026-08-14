@@ -1,4 +1,5 @@
-﻿using CoffeeShop.Models;
+﻿using Coffee.Models;
+using CoffeeShop.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeShop.Data
@@ -20,6 +21,7 @@ namespace CoffeeShop.Data
     
         public DbSet<User> Users { get; set; }
 
-        
+        public DbSet<Contact> Contacts { get; set; }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CoffeeShop.Data;
+using CoffeeShop.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,7 +34,27 @@ namespace CoffeeShop.Controllers
 
             return View(orders);
         }
+        public IActionResult Details(int id)
+        {
+            var order = _context.Orders
+                .FirstOrDefault(x => x.OrderId == id);
 
+            if (order == null)
+                return NotFound();
+
+            var details = _context.OrderDetails
+                .Include(x => x.Product)
+                .Where(x => x.OrderId == id)
+                .ToList();
+
+            var vm = new OrderDetailsViewModel
+            {
+                Order = order,
+                OrderDetails = details
+            };
+
+            return View(vm);
+        }
         // Hủy đơn hàng
         public IActionResult Cancel(int id)
         {
