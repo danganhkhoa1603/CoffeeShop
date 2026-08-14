@@ -1,0 +1,65 @@
+﻿@model CoffeeShop.ViewModels.RevenueReportViewModel
+
+<h2 class="mb-4">
+    📊 Báo cáo doanh thu
+</h2>
+
+<div class="row mb-4">
+
+    <div class="col-md-6">
+
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <h5>Tổng doanh thu</h5>
+
+                <h2 class="text-success">
+
+                    @Model.TotalRevenue.ToString("N0") VNĐ
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-6">
+
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <h5>Tổng đơn hàng</h5>
+
+                <h2 class="text-primary">
+
+                    @Model.TotalOrders
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-8">
+
+        <canvas id="barChart"></canvas>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <canvas id="pieChart"></canvas>
+
+    </div>
+
+</div>
