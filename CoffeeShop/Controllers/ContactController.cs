@@ -64,5 +64,38 @@ namespace CoffeeShop.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        [HttpPost]
+        public async Task<IActionResult> MarkAsRead(int id)
+        {
+            // Tìm contact theo Id
+            var contact = await _context.Contacts.FindAsync(id);
+
+            if (contact != null)
+            {
+                // Đổi trạng thái IsRead thành true (1 trong SQL Server)
+                contact.IsRead = true;
+
+                _context.Update(contact);
+                await _context.SaveChangesAsync(); // Lưu thay đổi vào DB
+            }
+
+            // Load lại trang danh sách hỗ trợ
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        public async Task<IActionResult> ToggleStatus(int id)
+        {
+            var contact = await _context.Contacts.FindAsync(id);
+            if (contact != null)
+            {
+                // Đảo ngược trạng thái: Nếu đang true -> false, nếu false -> true
+                contact.IsRead = !contact.IsRead;
+
+                _context.Update(contact);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

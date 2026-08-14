@@ -70,15 +70,23 @@
                                     @item.Status
                                 </span>
                             }
+                            else if (item.Status == "Đã xác nhận")
+                            {
+                                <!-- MÀU XANH BIỂN NHẠT -->
+                                <span class="badge" style="background-color: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-weight: 600; padding: 6px 12px; border-radius: 8px;">
+                                    @item.Status
+                                </span>
+                            }
                             else if (item.Status == "Đang pha chế")
                             {
                                 <span class="badge bg-primary">
                                     @item.Status
                                 </span>
                             }
-                            else if (item.Status == "Hoàn thành")
+                            else if (item.Status == "Hoàn thành" || item.Status == "Đã hoàn thành")
                             {
-                                <span class="badge bg-success">
+                                <!-- MÀU XANH LÁ NHẠT TƯƠI SÁNG -->
+                                <span class="badge" style="background-color: #d1fae5; color: #047857; border: 1px solid #a7f3d0; font-weight: 600; padding: 6px 12px; border-radius: 8px;">
                                     @item.Status
                                 </span>
                             }
@@ -141,5 +149,4 @@
         </tbody>
 
     </table>
-
 </div>

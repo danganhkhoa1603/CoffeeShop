@@ -6,102 +6,130 @@
 
 <link rel="stylesheet" href="~/css/login.css" />
 
-<div class="login-page">
+<!-- Style bổ sung để đồng bộ giao diện & sửa lỗi vỡ khung -->
+<style>
+    /* Cố định kích thước khung chứa 2 cột */
+    .login-box {
+        width: 100% !important;
+        max-width: 900px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        border-radius: 20px !important;
+        overflow: hidden !important;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.4) !important;
+    }
 
+    /* Chia tỉ lệ 2 bên chuẩn Flexbox */
+    .left-side {
+        flex: 1 !important;
+        padding: 40px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+    }
+
+    .right-side {
+        flex: 1.2 !important; /* Bên phải rộng hơn chút để chứa đủ form */
+        padding: 40px !important;
+    }
+
+    /* Tối ưu khoảng cách các ô input */
+    .form-group-custom {
+        margin-bottom: 12px;
+    }
+
+        .form-group-custom label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            color: #d1b8a5;
+        }
+
+    .form-control-custom {
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 1px solid transparent;
+        outline: none;
+        font-size: 0.95rem;
+    }
+
+        .form-control-custom:focus {
+            border-color: #e67e22;
+        }
+
+    /* Tối ưu nút Đăng ký */
+    .btn-login {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        font-weight: 600;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="login-page">
     <div class="login-box">
 
+        <!-- Cột bên trái: Logo & Thông điệp -->
         <div class="left-side">
-
-            <img src="~/images/logo.png"
-                 class="logo-image" />
-
-            <h2>Coffee House</h2>
-
-            <p>
-
-                Fresh Coffee Every Day
-
+            <img src="https://cdn-icons-png.flaticon.com/512/924/924514.png" alt="Coffee House Logo" class="logo-image" onerror="this.src='https://cdn-icons-png.flaticon.com/512/924/924514.png'">
+            <h2 style="font-weight: 700; margin-bottom: 10px;">Coffee Premium</h2>
+            <p style="color: #d1b8a5; line-height: 1.5;">
+                Thưởng thức hương vị nguyên bản mỗi ngày. Đăng ký tài khoản để nhận thêm nhiều ưu đãi!
             </p>
-
         </div>
 
+        <!-- Cột bên phải: Form đăng ký -->
         <div class="right-side">
-
-            <div class="logo">
-
+            <div class="logo" style="font-size: 1.8rem; font-weight: 700; margin-bottom: 20px;">
                 Đăng ký
-
             </div>
 
             <form asp-action="Register" method="post">
 
-                <div class="mb-3">
-
+                <div class="form-group-custom">
                     <label>Họ tên</label>
-
-                    <input asp-for="FullName" class="form-control" />
-
+                    <input asp-for="FullName" class="form-control-custom" placeholder="Nhập họ và tên" required />
                 </div>
 
-                <div class="mb-3">
-
+                <div class="form-group-custom">
                     <label>Số điện thoại</label>
-
-                    <input asp-for="Phone" class="form-control" />
-
+                    <input asp-for="Phone" class="form-control-custom" placeholder="Nhập số điện thoại" required />
                 </div>
 
-                <div class="mb-3">
-
+                <div class="form-group-custom">
                     <label>Địa chỉ</label>
-
-                    <input asp-for="Address" class="form-control" />
-
+                    <input asp-for="Address" class="form-control-custom" placeholder="Nhập địa chỉ giao hàng" required />
                 </div>
 
-                <div class="mb-3">
-
+                <div class="form-group-custom">
                     <label>Mật khẩu</label>
-
-                    <input asp-for="Password"
-                           type="password"
-                           class="form-control" />
-
+                    <input asp-for="Password" type="password" class="form-control-custom" placeholder="Nhập mật khẩu" required />
                 </div>
 
                 @if (ViewBag.Error != null)
                 {
-                    <div class="alert alert-danger">
-
+                    <div class="alert alert-danger mt-2 mb-2 p-2" style="font-size: 0.85rem; border-radius: 8px;">
                         @ViewBag.Error
-
                     </div>
                 }
 
-                <button class="btn-login">
-
-                    Đăng ký
-
+                <button type="submit" class="btn-login">
+                    Đăng ký ngay
                 </button>
 
             </form>
 
-            <div class="text-center mt-4">
-
+            <div class="text-center mt-3" style="font-size: 0.9rem; color: #d1b8a5;">
                 Đã có tài khoản?
-
-                <a asp-controller="Account"
-                   asp-action="Login"
-                   class="link">
-
+                <a asp-controller="Account" asp-action="Login" class="link" style="color: #fff; font-weight: 600; text-decoration: underline;">
                     Đăng nhập
-
                 </a>
-
             </div>
 
         </div>
 
     </div>
-
 </div>

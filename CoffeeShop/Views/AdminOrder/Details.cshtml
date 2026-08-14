@@ -12,7 +12,6 @@
 </div>
 
 <div class="row g-4">
-
     <!-- Customer & Order Summary -->
     <div class="col-md-5">
         <div class="admin-card h-100 mb-0">
@@ -121,7 +120,10 @@
                                     </div>
                                 </td>
                                 <td>@detail.Price.ToString("N0") đ</td>
-                                <td class="text-center">x@detail.Quantity</td>
+
+                                <!-- ĐÃ SỬA LỖI TẠI DÒNG NÀY: Dùng @(detail.Quantity) -->
+                                <td class="text-center">x@(detail.Quantity)</td>
+
                                 <td class="text-end fw-bold text-dark">@subtotal.ToString("N0") đ</td>
                             </tr>
                         }
@@ -135,5 +137,4 @@
             </div>
         </div>
     </div>
-
 </div>

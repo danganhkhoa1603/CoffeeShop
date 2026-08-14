@@ -15,16 +15,18 @@ namespace CoffeeShop.Controllers
 
         // =========================
         // Trang chủ
+        // Chỉ hiển thị sản phẩm Category 1 và 2
         // =========================
         public IActionResult Index(string? keyword, int? price)
         {
-            var products = _context.Products.AsQueryable();
+            var products = _context.Products
+                                   .Where(x => x.CategoryId == 1 || x.CategoryId == 2)
+                                   .AsQueryable();
 
             // Tìm kiếm
-            if (!string.IsNullOrEmpty(keyword))
+            if (!string.IsNullOrWhiteSpace(keyword))
             {
-                products = products.Where(x =>
-                    x.ProductName.Contains(keyword));
+                products = products.Where(x => x.ProductName.Contains(keyword));
             }
 
             // Lọc theo giá
@@ -38,7 +40,7 @@ namespace CoffeeShop.Controllers
 
                     case 2:
                         products = products.Where(x => x.Price >= 50000 &&
-                                                       x.Price <= 100000);
+                                                      x.Price <= 100000);
                         break;
 
                     case 3:
@@ -59,7 +61,7 @@ namespace CoffeeShop.Controllers
         }
 
         // =========================
-        // Cửa hàng
+        // Cửa hàng (Nguyên liệu)
         // =========================
         public IActionResult Store()
         {
@@ -71,7 +73,7 @@ namespace CoffeeShop.Controllers
         }
 
         // =========================
-        // Liên hệ (Khách hàng)
+        // Liên hệ
         // =========================
         public IActionResult Contact()
         {
