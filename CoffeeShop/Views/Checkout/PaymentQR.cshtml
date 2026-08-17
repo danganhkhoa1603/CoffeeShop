@@ -1,0 +1,288 @@
+@model CoffeeShop.ViewModels.PaymentQRViewModel
+
+@{
+    ViewData["Title"] = $"Thanh toán QR Đơn hàng #{Model.Order.OrderId}";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-4">
+        <div class="badge bg-success-subtle text-success px-3 py-2 rounded-pill mb-2 fs-6">
+            <i class="bi bi-check-circle-fill me-1"></i> Đơn hàng #@Model.Order.OrderId đã được khởi tạo
+        </div>
+        <h2 class="fw-bold text-dark mb-1">Quét mã QR để thanh toán</h2>
+        <p class="text-muted mb-2">Mở ứng dụng Ngân hàng (ACB, VCB, MB, Techcombank...) hoặc Ví điện tử để quét mã thanh toán</p>
+        
+        <!-- Live Real-Time Auto-Check Status Indicator -->
+        <div id="listeningIndicator" class="d-inline-flex align-items-center gap-2 px-3 py-1 bg-light border border-primary-subtle rounded-pill small text-primary shadow-xs">
+            <span class="spinner-grow spinner-grow-sm text-primary" role="status" aria-hidden="true"></span>
+            <span id="listeningText">Đang tự động lắng nghe giao dịch chuyển khoản từ ngân hàng ACB...</span>
+        </div>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <!-- QR Code Card -->
+        <div class="col-lg-5 col-md-6">
+            <div class="card shadow-sm border-0 rounded-4 text-center p-4 h-100 bg-white">
+                <div class="d-flex align-items-center justify-content-center gap-2 mb-3">
+                    <span class="badge bg-primary px-3 py-2 fs-6 rounded-pill">
+                        <i class="bi bi-qr-code-scan me-1"></i> VietQR ACB
+                    </span>
+                    <span class="badge bg-success text-white px-3 py-2 fs-6 rounded-pill">
+                        <i class="bi bi-lightning-charge-fill me-1"></i> Tự động duyệt
+                    </span>
+                </div>
+
+                <div class="qr-container my-2 p-2 bg-light rounded-3 d-inline-block mx-auto border position-relative">
+                    <img src="@Model.QrImageUrl" 
+                         alt="Mã QR thanh toán ngân hàng ACB" 
+                         class="img-fluid rounded-2 shadow-xs" 
+                         style="max-width: 300px; width: 100%;" />
+                </div>
+
+                <div class="mt-3 d-flex justify-content-center gap-2">
+                    <a href="@Model.QrImageUrl" 
+                       download="VietQR_ACB_DonHang_@(Model.Order.OrderId).png" 
+                       target="_blank"
+                       class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+                        <i class="bi bi-download me-1"></i> Tải ảnh mã QR
+                    </a>
+                </div>
+
+                <div class="mt-4 pt-3 border-top small text-muted text-start">
+                    <div class="fw-bold text-dark mb-1"><i class="bi bi-phone me-1"></i> Hướng dẫn thanh toán:</div>
+                    <ol class="ps-3 mb-0">
+                        <li>Mở App Ngân hàng bất kỳ hoặc Ví điện tử.</li>
+                        <li>Chọn <strong>Quét QR</strong> và quét mã phía trên.</li>
+                        <li>Kiểm tra số tiền & nội dung, sau đó xác nhận chuyển tiền.</li>
+                        <li>Hệ thống <strong>tự động nhận diện thanh toán thành công</strong> và chuyển trang ngay lập tức.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bank Details Card -->
+        <div class="col-lg-6 col-md-6">
+            <div class="card shadow-sm border-0 rounded-4 p-4 h-100 bg-white">
+                <h5 class="fw-bold text-dark border-bottom pb-3 mb-3">
+                    <i class="bi bi-bank2 text-primary me-2"></i>Thông tin chuyển khoản ngân hàng
+                </h5>
+
+                <!-- Account Info Items with Copy Buttons -->
+                <div class="mb-3 p-3 bg-light rounded-3">
+                    <span class="text-muted small d-block mb-1">Ngân hàng thụ hưởng:</span>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <strong class="text-dark fs-6">@Model.BankName</strong>
+                        <span class="badge bg-primary text-white">ACB</span>
+                    </div>
+                </div>
+
+                <div class="mb-3 p-3 bg-light rounded-3">
+                    <span class="text-muted small d-block mb-1">Chủ tài khoản:</span>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <strong class="text-dark fs-6 text-uppercase">@Model.AccountHolder</strong>
+                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="copyText('@Model.AccountHolder', this)">
+                            <i class="bi bi-clipboard me-1"></i> Sao chép
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mb-3 p-3 bg-light rounded-3 border border-primary-subtle">
+                    <span class="text-muted small d-block mb-1">Số tài khoản:</span>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <strong class="text-primary fs-4 font-monospace">@Model.AccountNumber</strong>
+                        <button type="button" class="btn btn-sm btn-primary rounded-pill px-3" onclick="copyText('@Model.AccountNumber', this)">
+                            <i class="bi bi-clipboard me-1"></i> Sao chép STK
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mb-3 p-3 bg-light rounded-3">
+                    <span class="text-muted small d-block mb-1">Số tiền cần thanh toán:</span>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <strong class="text-danger fs-4">@Model.Amount.ToString("N0") VNĐ</strong>
+                        <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="copyText('@Convert.ToInt64(Model.Amount)', this)">
+                            <i class="bi bi-clipboard me-1"></i> Sao chép số tiền
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mb-3 p-3 bg-light rounded-3 border border-warning-subtle">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="text-muted small">Nội dung chuyển khoản (Bắt buộc):</span>
+                        <span class="badge bg-warning text-dark small"><i class="bi bi-exclamation-triangle-fill me-1"></i>Quan trọng</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <strong class="text-dark fs-5 font-monospace text-danger">@Model.TransferContent</strong>
+                        <button type="button" class="btn btn-sm btn-warning rounded-pill px-3 fw-bold" onclick="copyText('@Model.TransferContent', this)">
+                            <i class="bi bi-clipboard me-1"></i> Sao chép nội dung
+                        </button>
+                    </div>
+                </div>
+
+                <div class="alert alert-success py-2 px-3 small rounded-3 mb-4">
+                    <i class="bi bi-check-circle-fill me-1 text-success"></i> Hệ thống tự động xác nhận giao dịch ngay khi nhận được tiền với nội dung <strong>@Model.TransferContent</strong>.
+                </div>
+
+                <!-- Action Confirmation Buttons -->
+                <div class="d-flex flex-column gap-2 mt-auto">
+                    <form method="post" asp-action="ConfirmPayment" asp-route-id="@Model.Order.OrderId">
+                        <button type="submit" class="btn btn-success btn-lg w-100 py-3 rounded-pill fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2">
+                            <i class="bi bi-check2-circle fs-5"></i>
+                            <span>Tôi đã hoàn tất chuyển khoản</span>
+                        </button>
+                    </form>
+
+                    <div class="d-flex gap-2">
+                        <a asp-controller="Order" asp-action="Details" asp-route-id="@Model.Order.OrderId" class="btn btn-outline-secondary w-50 rounded-pill py-2">
+                            <i class="bi bi-receipt me-1"></i> Xem chi tiết đơn
+                        </a>
+                        <a asp-controller="Order" asp-action="History" class="btn btn-outline-primary w-50 rounded-pill py-2">
+                            <i class="bi bi-bag-check me-1"></i> Lịch sử đơn hàng
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Success Celebration (Auto Pops up when transaction is detected) -->
+<div class="modal fade" id="paymentSuccessModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-lg text-center p-4">
+            <div class="modal-body py-4">
+                <div class="mb-3">
+                    <div class="rounded-circle bg-success text-white d-inline-flex align-items-center justify-content-center shadow-lg" style="width: 90px; height: 90px; animation: pulseSuccess 1.5s infinite;">
+                        <i class="bi bi-check-lg fs-1"></i>
+                    </div>
+                </div>
+                <h3 class="fw-bold text-success mb-2">🎉 Giao dịch thành công!</h3>
+                <p class="text-dark fs-6 mb-1">Hệ thống đã tự động nhận diện thanh toán cho đơn hàng <strong>#@Model.Order.OrderId</strong>.</p>
+                <p class="text-muted small mb-4">Số tiền: <strong class="text-danger">@Model.Amount.ToString("N0") VNĐ</strong> (Ngân hàng ACB)</p>
+
+                <div class="p-3 bg-light rounded-3 mb-3">
+                    <div class="spinner-border spinner-border-sm text-success me-2" role="status"></div>
+                    <span class="text-muted small">Đang tự động chuyển hướng đến chi tiết đơn hàng (<span id="redirectCountdown" class="fw-bold text-success">3</span>s)...</span>
+                </div>
+
+                <a asp-controller="Order" asp-action="Details" asp-route-id="@Model.Order.OrderId" class="btn btn-success rounded-pill px-4 py-2 w-100 fw-bold">
+                    Xem chi tiết đơn hàng ngay <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast notification for copy action -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055">
+    <div id="copyToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                <i class="bi bi-check-circle-fill me-2"></i> <span id="toastMsg">Đã sao chép vào bộ nhớ tạm!</span>
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<style>
+    @@keyframes pulseSuccess {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(25, 135, 84, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(25, 135, 84, 0); }
+    }
+</style>
+
+@section Scripts {
+    <script>
+        const orderId = @Model.Order.OrderId;
+        let pollInterval = null;
+        let isSuccessHandled = false;
+
+        // Auto Polling to check payment status
+        function startPaymentStatusPolling() {
+            pollInterval = setInterval(function() {
+                if (isSuccessHandled) return;
+
+                fetch('/Checkout/CheckPaymentStatus?orderId=' + orderId)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && data.isPaid && !isSuccessHandled) {
+                            handlePaymentSuccess();
+                        }
+                    })
+                    .catch(err => console.log('Polling check:', err));
+            }, 2000);
+        }
+
+        // Trigger Success UI & Countdown Redirect
+        function handlePaymentSuccess() {
+            isSuccessHandled = true;
+            if (pollInterval) clearInterval(pollInterval);
+
+            // Play notification chime
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15); // A5
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.4);
+            } catch (e) {}
+
+            // Show Success Modal
+            const modalEl = document.getElementById('paymentSuccessModal');
+            if (modalEl) {
+                const modal = new bootstrap.Modal(modalEl);
+                modal.show();
+            }
+
+            // Countdown timer to redirect
+            let countdown = 3;
+            const countdownEl = document.getElementById('redirectCountdown');
+            const countdownTimer = setInterval(function() {
+                countdown--;
+                if (countdownEl) countdownEl.innerText = countdown;
+                if (countdown <= 0) {
+                    clearInterval(countdownTimer);
+                    window.location.href = '/Order/Details/' + orderId;
+                }
+            }, 1000);
+        }
+
+        // Copy text helper
+        function copyText(text, btnElement) {
+            navigator.clipboard.writeText(text).then(function() {
+                const toastEl = document.getElementById('copyToast');
+                const toastMsg = document.getElementById('toastMsg');
+                if (toastMsg) toastMsg.innerText = `Đã sao chép: "${text}"`;
+                if (toastEl) {
+                    const toast = new bootstrap.Toast(toastEl, { delay: 2000 });
+                    toast.show();
+                }
+
+                if (btnElement) {
+                    const originalHtml = btnElement.innerHTML;
+                    btnElement.innerHTML = '<i class="bi bi-check2 me-1"></i> Đã chép!';
+                    btnElement.classList.add('btn-success');
+                    setTimeout(() => {
+                        btnElement.innerHTML = originalHtml;
+                        btnElement.classList.remove('btn-success');
+                    }, 2000);
+                }
+            }).catch(function(err) {
+                alert('Đã sao chép: ' + text);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            startPaymentStatusPolling();
+        });
+    </script>
+}

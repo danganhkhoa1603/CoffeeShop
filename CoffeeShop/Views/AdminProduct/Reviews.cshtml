@@ -1,0 +1,57 @@
+﻿@model List<CoffeeShop.Models.Review>
+
+@{
+    ViewData["Title"] = "Quản lý đánh giá";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-dark mb-0">
+            <i class="bi bi-star-fill text-warning me-2"></i>Danh sách đánh giá từ Khách hàng
+        </h3>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Mã đơn</th>
+                        <th>Tài khoản</th>
+                        <th>Đánh giá</th>
+                        <th>Nội dung nhận xét</th>
+                        <th>Thời gian</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-bold text-primary">#@item.OrderId</td>
+                                <td class="fw-semibold">@item.UserId</td>
+                                <td>
+                                    <span class="text-warning fw-bold">
+                                        @for (int i = 0; i < item.Rating; i++)
+                                        {
+                                            <i class="bi bi-star-fill"></i>
+                                        }
+                                    </span>
+                                </td>
+                                <td>@item.Comment</td>
+                                <td class="text-muted small">@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">Chưa có đánh giá nào từ khách hàng.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

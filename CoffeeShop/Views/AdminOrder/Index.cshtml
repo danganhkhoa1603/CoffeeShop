@@ -43,7 +43,7 @@
         </div>
         <div class="stat-details">
             <h5>Doanh thu hoàn thành</h5>
-            <div class="stat-value text-primary">@(((decimal)ViewBag.TotalRevenue).ToString("N0")) đ</div>
+            <div class="stat-value text-primary">@(((decimal)(ViewBag.TotalRevenue ?? 0)).ToString("N0")) đ</div>
         </div>
     </div>
 </div>
@@ -69,26 +69,31 @@
         </div>
     </div>
 
-    <!-- Search Bar -->
-    <form method="get" asp-action="Index" class="row g-2 mb-4">
-        <input type="hidden" name="status" value="@currentStatus" />
-        <div class="col-md-5">
-            <div class="input-group">
-                <input type="text" name="search" class="form-control" placeholder="Tìm theo tên khách, SĐT hoặc mã đơn..." value="@ViewBag.CurrentSearch" />
-                <button type="submit" class="btn btn-primary-coffee">
-                    <i class="bi bi-search"></i> Tìm kiếm
-                </button>
-            </div>
+    <!-- Search Bar & Export Button -->
+    <div class="row g-2 mb-4 align-items-center justify-content-between">
+        <div class="col-md-7">
+            <form method="get" asp-action="Index" class="d-flex gap-2">
+                <input type="hidden" name="status" value="@currentStatus" />
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Tìm theo tên khách, SĐT hoặc mã đơn..." value="@ViewBag.CurrentSearch" />
+                    <button type="submit" class="btn btn-primary-coffee">
+                        <i class="bi bi-search"></i> Tìm kiếm
+                    </button>
+                </div>
+                @if (!string.IsNullOrEmpty(ViewBag.CurrentSearch))
+                {
+                    <a asp-action="Index" asp-route-status="@currentStatus" class="btn btn-outline-secondary text-nowrap">
+                        <i class="bi bi-x-circle"></i> Xóa lọc
+                    </a>
+                }
+            </form>
         </div>
-        @if (!string.IsNullOrEmpty(ViewBag.CurrentSearch))
-        {
-            <div class="col-auto">
-                <a asp-action="Index" asp-route-status="@currentStatus" class="btn btn-outline-secondary">
-                    <i class="bi bi-x-circle"></i> Xóa lọc
-                </a>
-            </div>
-        }
-    </form>
+        <div class="col-auto">
+            <a asp-action="ExportAllExcel" asp-route-status="@currentStatus" asp-route-search="@ViewBag.CurrentSearch" class="btn btn-outline-success">
+                <i class="bi bi-file-earmark-excel-fill text-success me-1"></i> Xuất danh sách Excel (@(Model?.Count() ?? 0))
+            </a>
+        </div>
+    </div>
 
     <!-- Orders Table -->
     <div class="table-responsive table-scrollable">
@@ -106,7 +111,7 @@
                 </tr>
             </thead>
             <tbody>
-                @if (!Model.Any())
+                @if (Model == null || !Model.Any())
                 {
                     <tr>
                         <td colspan="8" class="text-center py-5 text-muted">
@@ -176,6 +181,10 @@
 
                                     <a asp-action="Details" asp-route-id="@item.OrderId" class="btn-action btn-action-view" title="Xem chi tiết">
                                         <i class="bi bi-eye"></i>
+                                    </a>
+
+                                    <a asp-action="PrintInvoice" asp-route-id="@item.OrderId" target="_blank" class="btn-action" style="background-color: #f5ede6; color: #6f4e37; border: 1px solid #eae3dc;" title="In hóa đơn">
+                                        <i class="bi bi-printer"></i>
                                     </a>
 
                                     <form asp-action="Delete" asp-route-id="@item.OrderId" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa đơn hàng này?');">

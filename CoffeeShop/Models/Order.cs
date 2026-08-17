@@ -25,6 +25,10 @@ namespace CoffeeShop.Models
         public decimal TotalMoney { get; set; }
 
         public string? Status { get; set; }
+
         public ICollection<OrderDetail>? OrderDetails { get; set; }
+
+        // SỬA THÀNH ICOLLECTION (SỐ NHIỀU):
+        public virtual ICollection<Review>? Reviews { get; set; }
     }
 }

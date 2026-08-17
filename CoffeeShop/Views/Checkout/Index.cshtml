@@ -1,126 +1,220 @@
-﻿@using CoffeeShop.Extensions
+@using CoffeeShop.Extensions
 @using CoffeeShop.Models
-
 @model CoffeeShop.Models.Order
 
 @{
-    var cart = Context.Session.GetObject<List<CartItem>>("Cart")
-               ?? new List<CartItem>();
-
-    decimal total = cart.Sum(x => x.Total);
-
-    decimal ship = 20000;
-
-    decimal grand = total + ship;
+    ViewData["Title"] = "Thanh toán đơn hàng";
+    var cart = Context.Session.GetObject<List<CartItem>>("Cart") ?? new List<CartItem>();
+    decimal subtotal = cart.Sum(x => x.Total);
+    decimal shippingFee = 20000;
+    decimal grandTotal = subtotal + shippingFee;
 }
 
-
-<div class="container mt-5">
-
-    <h2>Thanh toán</h2>
-
-    <form method="post">
-
-        <div class="mb-3">
-
-            <label>Họ tên</label>
-
-            <input asp-for="CustomerName"
-                   class="form-control" />
-
-        </div>
-
-        <div class="mb-3">
-
-            <label>Số điện thoại</label>
-
-            <input asp-for="Phone"
-                   class="form-control" />
-
-        </div>
-
-        <div class="mb-3">
-
-            <label>Địa chỉ</label>
-
-            <input asp-for="Address"
-                   class="form-control" />
-
-        </div>
-
-        <div class="mb-3">
-
-            <label>Ghi chú</label>
-
-            <textarea asp-for="Note"
-                      class="form-control"></textarea>
-
-        </div>
-
-        <button type="submit"
-                class="btn btn-success btn-lg w-100">
-
-            🛒 Xác nhận đặt hàng
-
-        </button>
-    </form>
-    <hr />
-
-    <h3>Đơn hàng của bạn</h3>
-
-    <table class="table">
-
-        <thead>
-
-            <tr>
-
-                <th>Sản phẩm</th>
-
-                <th>SL</th>
-
-                <th>Thành tiền</th>
-
-            </tr>
-
-        </thead>
-
-        <tbody>
-
-            @foreach (var item in cart)
-            {
-                <tr>
-
-                    <td>@item.Product.ProductName</td>
-
-                    <td>@item.Quantity</td>
-
-                    <td>@item.Total.ToString("N0") VNĐ</td>
-
-                </tr>
-            }
-
-        </tbody>
-
-    </table>
-
-    <div class="text-end">
-
-        <h4>
-            Tạm tính:
-            @total.ToString("N0") VNĐ
-        </h4>
-
-        <h4>
-            Phí ship:
-            @ship.ToString("N0") VNĐ
-        </h4>
-
-        <h2 class="text-danger">
-
-            Tổng:
-            @grand.ToString("N0") VNĐ
-
+<div class="container py-5">
+    <div class="mb-4">
+        <h2 class="fw-bold text-dark mb-1">
+            <i class="bi bi-credit-card-2-front text-primary me-2"></i>Thanh toán đơn hàng
         </h2>
-
+        <p class="text-muted mb-0">Vui lòng kiểm tra thông tin giao hàng và chọn phương thức thanh toán phù hợp</p>
     </div>
+
+    @if (!cart.Any())
+    {
+        <div class="alert alert-warning text-center py-5">
+            <i class="bi bi-cart-x fs-1 d-block mb-3"></i>
+            <h5>Giỏ hàng của bạn đang trống!</h5>
+            <p class="text-muted">Hãy chọn những món thức uống thơm ngon trước khi tiến hành thanh toán nhé.</p>
+            <a asp-controller="Home" asp-action="Store" class="btn btn-coffee mt-2">
+                <i class="bi bi-cup-hot me-1"></i> Khám phá menu
+            </a>
+        </div>
+    }
+    else
+    {
+        <form method="post" asp-action="Index" id="checkoutForm">
+            <div class="row g-4">
+                <!-- Left Column: Delivery Info & Payment Methods -->
+                <div class="col-lg-7">
+                    <!-- 1. Delivery Info Card -->
+                    <div class="card shadow-sm border-0 rounded-4 mb-4">
+                        <div class="card-header bg-white border-bottom py-3">
+                            <h5 class="fw-bold mb-0 text-dark">
+                                <i class="bi bi-geo-alt-fill text-danger me-2"></i>1. Thông tin người nhận
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-secondary small">Họ và tên người nhận <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                                    <input asp-for="CustomerName" class="form-control" placeholder="Nguyễn Văn A" required />
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-secondary small">Số điện thoại liên hệ <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="bi bi-telephone"></i></span>
+                                    <input asp-for="Phone" class="form-control" placeholder="0901234567" required />
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-secondary small">Địa chỉ nhận hàng <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="bi bi-house-door"></i></span>
+                                    <input asp-for="Address" class="form-control" placeholder="Số nhà, tên đường, phường/xã, quận/huyện..." required />
+                                </div>
+                            </div>
+
+                            <div class="mb-0">
+                                <label class="form-label fw-semibold text-secondary small">Ghi chú đơn hàng (nếu có)</label>
+                                <textarea asp-for="Note" class="form-control" rows="2" placeholder="Ví dụ: Ít đá, ít đường, giao trong giờ hành chính..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Payment Method Card -->
+                    <div class="card shadow-sm border-0 rounded-4 mb-4">
+                        <div class="card-header bg-white border-bottom py-3">
+                            <h5 class="fw-bold mb-0 text-dark">
+                                <i class="bi bi-wallet2 text-success me-2"></i>2. Phương thức thanh toán
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <!-- Option 1: QR Payment (Recommended) -->
+                            <div class="form-check payment-option-card p-3 rounded-3 border mb-3 position-relative" style="background-color: #f8fafc; cursor: pointer;">
+                                <input class="form-check-input ms-0 me-3" type="radio" name="paymentMethod" id="paymentQR" value="QR" checked onchange="togglePaymentInfo()" />
+                                <label class="form-check-label w-100 ps-4" for="paymentQR" style="cursor: pointer;">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="fw-bold text-dark">
+                                            <i class="bi bi-qr-code-scan text-primary me-2"></i>Chuyển khoản qua mã QR (VietQR - ACB)
+                                        </span>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Khuyên dùng</span>
+                                    </div>
+                                    <small class="text-muted d-block">
+                                        Quét mã QR tự động điền số tiền và nội dung qua ứng dụng ngân hàng hoặc ví điện tử (ACB, Vietcombank, Techcombank, MB, MoMo,...).
+                                    </small>
+
+                                    <!-- ACB Bank Info Box -->
+                                    <div id="acbBankPreview" class="mt-3 p-3 rounded-3 bg-white border border-primary-subtle shadow-xs">
+                                        <div class="d-flex align-items-center gap-3 mb-2">
+                                            <div class="rounded-3 p-2 bg-primary text-white fw-bold small text-center" style="min-width: 55px;">
+                                                ACB
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-dark">Ngân hàng TMCP Á Châu (ACB)</div>
+                                                <div class="text-muted small">Chủ TK: <strong class="text-dark">DANG ANH KHOA</strong></div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center p-2 rounded bg-light small">
+                                            <span class="text-muted">Số tài khoản: <strong class="text-primary font-monospace fs-6">16010991</strong></span>
+                                            <span class="badge bg-primary text-white"><i class="bi bi-lightning-charge-fill me-1"></i>Tạo mã tức thì</span>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <!-- Option 2: Cash on Delivery (COD) -->
+                            <div class="form-check payment-option-card p-3 rounded-3 border position-relative" style="background-color: #f8fafc; cursor: pointer;">
+                                <input class="form-check-input ms-0 me-3" type="radio" name="paymentMethod" id="paymentCOD" value="COD" onchange="togglePaymentInfo()" />
+                                <label class="form-check-label w-100 ps-4" for="paymentCOD" style="cursor: pointer;">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="fw-bold text-dark">
+                                            <i class="bi bi-cash-coin text-warning me-2"></i>Thanh toán tiền mặt khi nhận hàng (COD)
+                                        </span>
+                                    </div>
+                                    <small class="text-muted d-block">
+                                        Bạn sẽ thanh toán trực tiếp bằng tiền mặt cho shipper khi nhận được cà phê.
+                                    </small>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Order Summary -->
+                <div class="col-lg-5">
+                    <div class="card shadow-sm border-0 rounded-4 sticky-top" style="top: 20px;">
+                        <div class="card-header bg-white border-bottom py-3">
+                            <h5 class="fw-bold mb-0 text-dark">
+                                <i class="bi bi-bag-check-fill text-primary me-2"></i>Đơn hàng của bạn (@cart.Sum(x => x.Quantity) món)
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <!-- Items List -->
+                            <div class="order-items-scroll mb-3" style="max-height: 280px; overflow-y: auto;">
+                                @foreach (var item in cart)
+                                {
+                                    <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <img src="~/uploads/@(item.Product.Image ?? "default.jpg")" 
+                                                 alt="@item.Product.ProductName"
+                                                 width="45" height="45" class="rounded object-fit-cover shadow-xs"
+                                                 onerror="this.src='https://cdn-icons-png.flaticon.com/512/924/924514.png'" />
+                                            <div>
+                                                <h6 class="mb-0 fw-semibold text-dark small">@item.Product.ProductName</h6>
+                                                <small class="text-muted">SL: @item.Quantity × @item.Product.Price.ToString("N0") đ</small>
+                                            </div>
+                                        </div>
+                                        <strong class="text-dark small">@item.Total.ToString("N0") đ</strong>
+                                    </div>
+                                }
+                            </div>
+
+                            <!-- Cost Breakdown -->
+                            <div class="py-2 border-bottom">
+                                <div class="d-flex justify-content-between mb-2 small text-muted">
+                                    <span>Tạm tính thức uống:</span>
+                                    <strong class="text-dark">@subtotal.ToString("N0") VNĐ</strong>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2 small text-muted">
+                                    <span>Phí giao hàng tận nơi:</span>
+                                    <strong class="text-dark">@shippingFee.ToString("N0") VNĐ</strong>
+                                </div>
+                            </div>
+
+                            <!-- Grand Total -->
+                            <div class="d-flex justify-content-between align-items-center py-3">
+                                <span class="fw-bold text-dark fs-5">Tổng thanh toán:</span>
+                                <span class="fw-bold text-danger fs-4">@grandTotal.ToString("N0") VNĐ</span>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary-coffee btn-lg w-100 py-3 rounded-pill fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-shield-lock-fill"></i>
+                                <span id="btnSubmitText">Xác nhận đặt hàng & Thanh toán</span>
+                            </button>
+
+                            <div class="text-center mt-3 small text-muted">
+                                <i class="bi bi-lock me-1"></i> Thông tin thanh toán được bảo mật an toàn 100%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    }
 </div>
+
+@section Scripts {
+    <script>
+        function togglePaymentInfo() {
+            const isQR = document.getElementById('paymentQR').checked;
+            const acbBox = document.getElementById('acbBankPreview');
+            const btnText = document.getElementById('btnSubmitText');
+            
+            if (isQR) {
+                if (acbBox) acbBox.style.display = 'block';
+                if (btnText) btnText.innerText = 'Xác nhận & Quét mã QR thanh toán';
+            } else {
+                if (acbBox) acbBox.style.display = 'none';
+                if (btnText) btnText.innerText = 'Xác nhận đặt hàng (COD)';
+            }
+        }
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            togglePaymentInfo();
+        });
+    </script>
+}

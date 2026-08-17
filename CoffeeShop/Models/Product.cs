@@ -9,7 +9,7 @@ namespace CoffeeShop.Models
         public int ProductId { get; set; }
 
         [Required]
-        public string ProductName { get; set; }
+        public string ProductName { get; set; } = string.Empty;
 
         public string? Description { get; set; }
 
@@ -23,9 +23,11 @@ namespace CoffeeShop.Models
 
         public int Stock { get; set; }
 
-
         public int CategoryId { get; set; }
 
-        public Category? Category { get; set; }
+        public virtual Category? Category { get; set; }
+
+        // Navigation property liên kết bảng Review
+        public virtual ICollection<Review>? Reviews { get; set; }
     }
 }

@@ -1,0 +1,361 @@
+@model CoffeeShop.ViewModels.OrderDetailsViewModel
+
+@{
+    Layout = null;
+    var order = Model.Order;
+    var details = Model.OrderDetails;
+    decimal subtotal = details.Sum(x => x.Price * x.Quantity);
+    decimal shippingFee = 20000;
+    decimal grandTotal = order.TotalMoney > 0 ? order.TotalMoney : (subtotal + shippingFee);
+    bool isQRPayment = order.Note != null && order.Note.Contains("QR");
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hóa đơn #@order.OrderId - Coffee Premium</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+            body {
+                font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+                background-color: #f6f3ef;
+                color: #2b1e16;
+                margin: 0;
+                padding: 20px;
+            }
+
+            .invoice-wrapper {
+                max-width: 800px;
+                margin: 0 auto;
+                background: #ffffff;
+                padding: 40px;
+                border-radius: 16px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+                border: 1px solid #eae3dc;
+            }
+
+            .store-header {
+                border-bottom: 2px dashed #d4a373;
+                padding-bottom: 20px;
+                margin-bottom: 25px;
+            }
+
+            .store-logo {
+                font-size: 26px;
+                font-weight: 800;
+                color: #6f4e37;
+                letter-spacing: -0.5px;
+            }
+
+            .invoice-title {
+                font-size: 22px;
+                font-weight: 800;
+                color: #2b1e16;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin-top: 10px;
+            }
+
+            .info-box {
+                background-color: #faf6f2;
+                border: 1px solid #eae3dc;
+                border-radius: 12px;
+                padding: 16px 20px;
+                margin-bottom: 25px;
+            }
+
+            .table-invoice {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+                margin-bottom: 25px;
+            }
+
+                .table-invoice th {
+                    background-color: #6f4e37;
+                    color: #ffffff;
+                    font-weight: 700;
+                    font-size: 13px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    padding: 12px 16px;
+                    border: none;
+                }
+
+                    .table-invoice th:first-child {
+                        border-top-left-radius: 8px;
+                    }
+
+                    .table-invoice th:last-child {
+                        border-top-right-radius: 8px;
+                    }
+
+                .table-invoice td {
+                    padding: 12px 16px;
+                    border-bottom: 1px solid #f2ece6;
+                    font-size: 14px;
+                    vertical-align: middle;
+                }
+
+                .table-invoice tbody tr:last-child td {
+                    border-bottom: 2px solid #eae3dc;
+                }
+
+            .summary-row td {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+
+            .grand-total-row td {
+                padding: 14px 16px;
+                background-color: #faf6f2;
+                font-size: 18px;
+                font-weight: 800;
+                color: #cf1322;
+                border-top: 2px solid #6f4e37;
+                border-bottom: 2px solid #6f4e37;
+            }
+
+            .signature-section {
+                margin-top: 40px;
+                padding-top: 20px;
+                border-top: 1px dashed #eae3dc;
+            }
+
+            .action-bar {
+                max-width: 800px;
+                margin: 0 auto 20px auto;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .btn-coffee {
+                background: linear-gradient(135deg, #6f4e37 0%, #4a3222 100%);
+                color: #ffffff;
+                border: none;
+                border-radius: 30px;
+                padding: 10px 24px;
+                font-weight: 600;
+                font-size: 14px;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                cursor: pointer;
+                box-shadow: 0 4px 12px rgba(111, 78, 55, 0.3);
+                transition: all 0.2s ease;
+            }
+
+                .btn-coffee:hover {
+                    background: linear-gradient(135deg, #7c583f 0%, #5b3d2b 100%);
+                    color: #ffffff;
+                    transform: translateY(-1px);
+                }
+
+            .btn-excel {
+                background: #107c41;
+                color: #ffffff;
+                border: none;
+                border-radius: 30px;
+                padding: 10px 22px;
+                font-weight: 600;
+                font-size: 14px;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                cursor: pointer;
+                box-shadow: 0 4px 12px rgba(16, 124, 65, 0.3);
+            }
+
+                .btn-excel:hover {
+                    background: #0b5e31;
+                    color: #ffffff;
+                }
+
+            /* Print Media Styles */
+            @@media print {
+                body {
+                    background-color: #ffffff;
+                    padding: 0;
+                }
+
+                .action-bar {
+                    display: none !important;
+                }
+
+                .invoice-wrapper {
+                    box-shadow: none;
+                    border: none;
+                    padding: 10px;
+                    max-width: 100%;
+                }
+
+                .table-invoice th {
+                    background-color: #eee !important;
+                    color: #000 !important;
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+            }
+    </style>
+</head>
+<body>
+
+    <!-- Action Bar (Hidden when printing) -->
+    <div class="action-bar d-print-none">
+        <button type="button" onclick="if (window.opener || window.history.length <= 1) { window.close(); } else { window.history.back(); }" class="btn btn-outline-secondary rounded-pill px-3">
+            <i class="bi bi-arrow-left me-1"></i> Quay lại
+        </button>
+        <div class="d-flex gap-2">
+            <a asp-action="ExportExcel" asp-route-id="@order.OrderId" class="btn-excel">
+                <i class="bi bi-file-earmark-excel-fill"></i> Xuất file Excel
+            </a>
+            <button onclick="window.print()" class="btn-coffee">
+                <i class="bi bi-printer-fill"></i> In hóa đơn (Ctrl + P)
+            </button>
+        </div>
+    </div>
+
+    <!-- Printable Invoice Container -->
+    <div class="invoice-wrapper">
+        <!-- Store Header -->
+        <div class="store-header">
+            <div class="row align-items-center">
+                <div class="col-sm-7">
+                    <div class="store-logo">☕ COFFEE PREMIUM</div>
+                    <div class="text-muted small mt-1">Đậm đà hương vị cà phê Việt Nam</div>
+                    <div class="small text-secondary mt-2">
+                        <div><i class="bi bi-geo-alt-fill text-danger me-1"></i> <strong>Địa chỉ:</strong> TP. Hồ Chí Minh</div>
+                        <div><i class="bi bi-telephone-fill text-primary me-1"></i> <strong>Hotline:</strong> 0938.282.070</div>
+                        <div><i class="bi bi-envelope-fill text-warning me-1"></i> <strong>Email:</strong> coffeeshop@gmail.com</div>
+                    </div>
+                </div>
+                <div class="col-sm-5 text-sm-end mt-3 mt-sm-0">
+                    <div class="invoice-title">HÓA ĐƠN BÁN HÀNG</div>
+                    <div class="fs-5 fw-bold text-danger">#@order.OrderId</div>
+                    <div class="text-muted small">Ngày đặt: @order.OrderDate.ToString("dd/MM/yyyy HH:mm")</div>
+                    <div class="text-muted small">Ngày in: @DateTime.Now.ToString("dd/MM/yyyy HH:mm")</div>
+                    <div class="mt-2">
+                        @if (order.Status == "Đã hoàn thành" || order.Status == "Hoàn thành")
+                        {
+                            <span class="badge bg-success px-3 py-2 rounded-pill">Đã hoàn thành</span>
+                        }
+                        else if (order.Status == "Đã xác nhận")
+                        {
+                            <span class="badge bg-info text-dark px-3 py-2 rounded-pill">Đã xác nhận thanh toán</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">@order.Status</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer & Delivery Info -->
+        <div class="info-box">
+            <div class="row g-3">
+                <div class="col-sm-6">
+                    <div class="text-muted small">Khách hàng nhận:</div>
+                    <strong class="fs-6 text-dark">@order.CustomerName</strong>
+                    <div class="text-muted small mt-1">
+                        <i class="bi bi-telephone me-1"></i> @order.Phone
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-muted small">Địa chỉ nhận hàng:</div>
+                    <div class="text-dark">@order.Address</div>
+                    @if (!string.IsNullOrEmpty(order.Note))
+                    {
+                        <div class="text-muted small mt-1">
+                            <strong>Ghi chú & Phương thức:</strong> @order.Note
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Items Table -->
+        <table class="table-invoice">
+            <thead>
+                <tr>
+                    <th style="width: 50px;" class="text-center">STT</th>
+                    <th>Tên món / Sản phẩm</th>
+                    <th style="width: 90px;" class="text-center">Số lượng</th>
+                    <th style="width: 130px;" class="text-end">Đơn giá</th>
+                    <th style="width: 150px;" class="text-end">Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int idx = 1;
+                }
+                @foreach (var item in details)
+                {
+                    var lineTotal = item.Price * item.Quantity;
+                    <tr>
+                        <td class="text-center text-muted">@(idx++)</td>
+                        <td>
+                            <strong class="text-dark">@(item.Product?.ProductName ?? "Sản phẩm")</strong>
+                        </td>
+                        <td class="text-center fw-bold">x@(item.Quantity)</td>
+                        <td class="text-end text-muted">@item.Price.ToString("N0") đ</td>
+                        <td class="text-end fw-bold text-dark">@lineTotal.ToString("N0") đ</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr class="summary-row">
+                    <td colspan="4" class="text-end text-muted">Tạm tính thức uống:</td>
+                    <td class="text-end fw-semibold">@subtotal.ToString("N0") VNĐ</td>
+                </tr>
+                <tr class="summary-row">
+                    <td colspan="4" class="text-end text-muted">Phí vận chuyển tận nơi:</td>
+                    <td class="text-end fw-semibold">@shippingFee.ToString("N0") VNĐ</td>
+                </tr>
+                <tr class="grand-total-row">
+                    <td colspan="4" class="text-end">TỔNG CỘNG THANH TOÁN:</td>
+                    <td class="text-end">@grandTotal.ToString("N0") VNĐ</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <!-- Signatures & Thank you -->
+        <div class="signature-section">
+            <div class="row text-center">
+                <div class="col-6">
+                    <div class="fw-bold text-dark">NGƯỜI MUA HÀNG</div>
+                    <div class="text-muted small fst-italic">(Ký và ghi rõ họ tên)</div>
+                    <div style="height: 70px;"></div>
+                    <div class="text-muted small">@order.CustomerName</div>
+                </div>
+                <div class="col-6">
+                    <div class="fw-bold text-dark">NGƯỜI BÁN HÀNG / THU NGÂN</div>
+                    <div class="text-muted small fst-italic">(Ký và ghi rõ họ tên)</div>
+                    <div style="height: 70px;"></div>
+                    <div class="fw-bold text-dark">Coffee Premium</div>
+                </div>
+            </div>
+            <div class="text-center text-muted small mt-4 pt-3 border-top fst-italic">
+                ❤️ Cảm ơn quý khách đã thưởng thức cà phê tại Coffee Premium! Hẹn gặp lại quý khách lần sau.
+            </div>
+        </div>
+    </div>
+
+    <!-- Tự động mở dialog In khi vừa load xong trang -->
+    <script>
+            window.addEventListener('DOMContentLoaded', () => {
+                setTimeout(() => {
+                    window.print();
+                }, 300);
+            });
+    </script>
+</body>
+</html>

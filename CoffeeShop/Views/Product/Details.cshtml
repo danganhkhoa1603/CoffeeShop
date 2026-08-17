@@ -3,9 +3,13 @@
 @model Product
 
 @{
-    ViewData["Title"] = "Chi tiết sản phẩm";
+    ViewData["Title"] = Model.ProductName;
 
     var related = ViewBag.RelatedProducts as List<Product>;
+
+    // Tính tổng số đánh giá và điểm trung bình thực tế từ database
+    var totalReviews = Model.Reviews?.Count ?? 0;
+    var avgRating = totalReviews > 0 ? Model.Reviews!.Average(r => r.Rating) : 0;
 }
 
 <div class="container py-5">
@@ -13,214 +17,181 @@
     <div class="row g-5 align-items-center">
 
         <!-- IMAGE -->
-
         <div class="col-lg-6">
-
             <div class="detail-image">
-
                 <img src="~/uploads/@Model.Image"
                      class="img-fluid rounded shadow product-image"
                      alt="@Model.ProductName">
-
             </div>
-
         </div>
 
         <!-- INFO -->
-
         <div class="col-lg-6">
 
             <span class="badge bg-success mb-3">
-
-                Coffee House
-
+                Coffee Premium
             </span>
 
             <h2 class="fw-bold mb-3">
-
                 @Model.ProductName
-
             </h2>
 
-            <div class="text-warning fs-4 mb-3">
-
-                ★★★★★
-
+            <!-- RATING DỘNG TỪ DATABASE -->
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <div class="text-warning fs-5">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (i <= Math.Round(avgRating))
+                        {
+                            <span>★</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted opacity-50">★</span>
+                        }
+                    }
+                </div>
                 <span class="text-muted fs-6">
-
-                    (125 đánh giá)
-
+                    @if (totalReviews > 0)
+                    {
+                        <span>(@avgRating.ToString("0.0") / 5.0 - @totalReviews đánh giá)</span>
+                    }
+                    else
+                    {
+                        <span>(Chưa có đánh giá)</span>
+                    }
                 </span>
-
             </div>
 
             <h2 class="text-danger fw-bold mb-4">
-
                 @Model.Price.ToString("N0") VNĐ
-
             </h2>
 
             <p class="text-muted">
-
                 @Model.Description
-
             </p>
 
             <p>
-
                 <strong>Tồn kho:</strong>
-
                 @Model.Stock sản phẩm
-
             </p>
 
             <hr>
 
-            <!-- QUANTITY -->
-
-            <div class="d-flex align-items-center mb-4">
-
-                <button type="button"
-                        class="btn btn-outline-secondary"
-                        onclick="minus()">
-
-                    -
-
-                </button>
-
-                <input id="qty"
-                       value="1"
-                       readonly
-                       class="form-control text-center mx-2 quantity">
-
-                <button type="button"
-                        class="btn btn-outline-secondary"
-                        onclick="plus(@Model.Stock)">
-
-                    +
-
-                </button>
-
-            </div>
-
             <!-- BUTTON -->
-
-            <a id="cartBtn"
+            <div class="d-flex align-items-center mb-4">
+                <a id="cartBtn"
                    asp-controller="Cart"
                    asp-action="AddToCart"
                    asp-route-id="@Model.ProductId"
                    asp-route-quantity="1"
                    class="btn btn-coffee btn-lg me-3">
+                    🛒 Thêm vào giỏ
+                </a>
 
-                🛒 Thêm vào giỏ
-
-            </a>
-
-            <a asp-controller="Home"
+                <a asp-controller="Home"
                    asp-action="Index"
                    class="btn btn-outline-secondary btn-lg">
-
-                ←
-
-            </a>
+                    ←
+                </a>
+            </div>
 
         </div>
 
     </div>
 
-    <!-- RELATED -->
+    <!-- KHU VỰC HIỂN THỊ DANH SÁCH ĐÁNH GIÁ -->
+    <hr class="my-5">
 
+    <h3 class="fw-bold mb-4">
+        💬 Đánh giá từ khách hàng (@totalReviews)
+    </h3>
+
+    @if (Model.Reviews == null || !Model.Reviews.Any())
+    {
+        <div class="alert alert-light text-center py-4 border rounded-3">
+            Chưa có đánh giá nào cho sản phẩm này.
+        </div>
+    }
+    else
+    {
+        <div class="row g-3">
+            @foreach (var review in Model.Reviews.OrderByDescending(r => r.CreatedAt))
+            {
+                <div class="col-12">
+                    <div class="card border-0 bg-light p-3 rounded-3 shadow-sm">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 38px; height: 38px;">
+                                    @(review.User?.FullName?.Substring(0, 1).ToUpper() ?? "K")
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">@(review.User?.FullName ?? "Khách hàng")</h6>
+                                    <small class="text-muted" style="font-size: 12px;">
+                                        @review.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="text-warning fs-6">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= review.Rating)
+                                    {
+                                        <span>★</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted opacity-50">★</span>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <p class="mb-0 text-secondary ps-5">
+                            @(string.IsNullOrWhiteSpace(review.Comment) ? "Khách hàng không để lại bình luận." : review.Comment)
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- RELATED PRODUCTS -->
     <hr class="my-5">
 
     <h3 class="text-center fw-bold mb-5">
-
         Có thể bạn cũng thích
-
     </h3>
 
     <div class="row">
-
         @if (related != null)
         {
             @foreach (var item in related)
             {
                 <div class="col-lg-3 col-md-6 mb-4">
-
                     <div class="card product-card h-100 shadow-sm">
-
                         <img src="~/uploads/@item.Image"
                              class="product-image">
 
                         <div class="card-body text-center">
-
                             <h5 class="fw-bold">
-
                                 @item.ProductName
-
                             </h5>
 
                             <p class="text-danger fw-bold">
-
                                 @item.Price.ToString("N0") VNĐ
-
                             </p>
 
                             <a asp-controller="Product"
-                                   asp-action="Details"
-                                   asp-route-id="@item.ProductId"
-                                   class="btn btn-coffee">
+                               asp-action="Details"
+                               asp-route-id="@item.ProductId"
+                               class="btn btn-coffee">g
 
                                 Xem chi tiết
-
                             </a>
-
                         </div>
-
                     </div>
-
                 </div>
             }
         }
-
     </div>
-
 </div>
-
-<script>
-
-    let qty = 1;
-
-    function plus(stock){
-
-        if(qty < stock){
-
-            qty++;
-
-            updateQty();
-
-        }
-
-    }
-
-    function minus(){
-
-        if(qty > 1){
-
-            qty--;
-
-            updateQty();
-
-        }
-
-    }
-
-    function updateQty(){
-
-        document.getElementById("qty").value = qty;
-
-        document.getElementById("cartBtn").href =
-            "/Cart/AddToCart?id=@Model.ProductId&quantity=" + qty;
-
-    }
-
-</script>

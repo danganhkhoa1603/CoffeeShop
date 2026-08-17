@@ -23,5 +23,7 @@ namespace CoffeeShop.Data
 
         public DbSet<Contact> Contacts { get; set; }
 
+        public DbSet<Review> Reviews { get; set; }
     }
+
 }

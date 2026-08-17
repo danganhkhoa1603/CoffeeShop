@@ -220,5 +220,19 @@ namespace CoffeeShop.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        // Danh sách đánh giá từ khách hàng
+        public async Task<IActionResult> Reviews()
+        {
+            if (!CheckAdminAccess())
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var reviews = await _context.Reviews
+                .OrderByDescending(r => r.CreatedAt)
+                .ToListAsync();
+
+            return View(reviews);
+        }
     }
 }

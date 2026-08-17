@@ -155,17 +155,20 @@
                                     <li><a class="dropdown-item" asp-controller="AdminProduct" asp-action="Index">☕ Quản lý sản phẩm</a></li>
                                     <li><a class="dropdown-item" asp-controller="AdminOrder" asp-action="Index">📦 Quản lý đơn hàng</a></li>
                                     <li>
-
                                         <a class="dropdown-item"
                                            asp-controller="Cart"
                                            asp-action="Index">
-
                                             <i class="bi bi-cart"></i>
-
                                             Giỏ hàng của tôi
-
                                         </a>
-
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="Order"
+                                           asp-action="History">
+                                            <i class="bi bi-bag-check"></i>
+                                            Lịch sử mua hàng
+                                        </a>
                                     </li>
                                     <li><hr class="dropdown-divider"></li>
                                 }
@@ -336,15 +339,24 @@
                         </div>
                     }
 
+                    @if (Context.Session.GetString("UserName") != null)
+                    {
+                        <!-- ORDER HISTORY ICON -->
+                        <a asp-controller="Order"
+                           asp-action="History"
+                           class="text-dark position-relative me-3"
+                           title="Lịch sử đơn hàng của tôi">
+                            <i class="bi bi-bag-check fs-5"></i>
+                        </a>
+                    }
+
                     <!-- CART -->
                     <a asp-controller="Cart"
                        asp-action="Index"
-                       class="text-dark position-relative">
-
+                       class="text-dark position-relative"
+                       title="Giỏ hàng của tôi">
                         <i class="bi bi-cart fs-5"></i>
-
                     </a>
-
                 </div>
 
             </div>
