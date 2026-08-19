@@ -20,21 +20,45 @@ namespace CoffeeShop.Controllers
         {
             return View();
         }
-
         [HttpPost]
         public IActionResult Register(User user)
         {
-            if (_context.Users.Any(x => x.Phone == user.Phone))
+            // Kiểm tra số điện thoại rỗng
+            if (string.IsNullOrWhiteSpace(user.Phone))
             {
-                ViewBag.Error = "Số điện thoại đã tồn tại!";
+                ViewBag.Error = "Vui lòng nhập số điện thoại!";
                 return View(user);
             }
 
+            // Kiểm tra định dạng số điện thoại Việt Nam
+            string phonePattern = @"^(0|\+84)(3|5|7|8|9)[0-9]{8}$";
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(
+                user.Phone.Trim(),
+                phonePattern))
+            {
+                ViewBag.Error = "Số điện thoại không hợp lệ! Ví dụ: 0938282070";
+                return View(user);
+            }
+
+            // Kiểm tra số điện thoại đã tồn tại
+            if (_context.Users.Any(x => x.Phone == user.Phone.Trim()))
+            {
+                ViewBag.Error = "Số điện thoại đã được đăng ký!";
+                return View(user);
+            }
+
+            // Chuẩn hóa dữ liệu
+            user.Phone = user.Phone.Trim();
+
+            // Mặc định khách hàng
             user.Role = "Customer";
             user.CreatedDate = DateTime.Now;
 
             _context.Users.Add(user);
             _context.SaveChanges();
+
+            TempData["Success"] = "Đăng ký thành công! Vui lòng đăng nhập.";
 
             return RedirectToAction("Login");
         }

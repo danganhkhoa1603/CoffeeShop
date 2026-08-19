@@ -1,135 +1,584 @@
 ﻿@model CoffeeShop.Models.User
 
 @{
-    ViewData["Title"] = "Đăng ký";
+    ViewData["Title"] = "Đăng ký tài khoản";
 }
 
 <link rel="stylesheet" href="~/css/login.css" />
-
-<!-- Style bổ sung để đồng bộ giao diện & sửa lỗi vỡ khung -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <style>
-    /* Cố định kích thước khung chứa 2 cột */
-    .login-box {
-        width: 100% !important;
-        max-width: 900px !important;
-        display: flex !important;
-        flex-direction: row !important;
-        border-radius: 20px !important;
-        overflow: hidden !important;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.4) !important;
+    /* =========================
+           REGISTER PAGE
+        ========================= */
+
+    .register-page {
+        min-height: calc(100vh - 80px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 50px 20px;
+        background: linear-gradient(rgba(35, 22, 15, 0.82), rgba(35, 22, 15, 0.92)), url('/images/coffee-bg.jpg') center/cover no-repeat;
     }
 
-    /* Chia tỉ lệ 2 bên chuẩn Flexbox */
-    .left-side {
-        flex: 1 !important;
-        padding: 40px !important;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: center !important;
+    /* Container chính */
+    .register-box {
+        width: 100%;
+        max-width: 1000px;
+        min-height: 620px;
+        display: grid;
+        grid-template-columns: 42% 58%;
+        background: #fff;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
     }
 
-    .right-side {
-        flex: 1.2 !important; /* Bên phải rộng hơn chút để chứa đủ form */
-        padding: 40px !important;
+    /* =========================
+           LEFT
+        ========================= */
+
+    .register-left {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 50px 40px;
+        color: #fff;
+        background: linear-gradient( rgba(60, 35, 20, 0.82), rgba(35, 20, 12, 0.92) ), url('/images/coffee-bg.jpg') center/cover no-repeat;
     }
 
-    /* Tối ưu khoảng cách các ô input */
-    .form-group-custom {
-        margin-bottom: 12px;
+    .register-logo {
+        width: 110px;
+        height: 110px;
+        object-fit: contain;
+        background: rgba(255,255,255,0.12);
+        padding: 18px;
+        border-radius: 50%;
+        margin-bottom: 25px;
+        border: 1px solid rgba(255,255,255,0.25);
     }
 
-        .form-group-custom label {
+    .register-left h1 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        letter-spacing: 0.5px;
+    }
+
+        .register-left h1 span {
+            color: #d6a16b;
+        }
+
+    .register-left p {
+        max-width: 320px;
+        color: #eaded5;
+        line-height: 1.7;
+        font-size: 15px;
+        margin-bottom: 30px;
+    }
+
+    .coffee-feature {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+        .coffee-feature span {
+            padding: 8px 14px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #f4e7dc;
+            font-size: 13px;
+        }
+
+    /* =========================
+           RIGHT
+        ========================= */
+
+    .register-right {
+        padding: 50px 55px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: #fff;
+    }
+
+    .register-header {
+        margin-bottom: 28px;
+    }
+
+        .register-header h2 {
+            color: #3b2418;
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .register-header p {
+            color: #8a7b72;
+            margin: 0;
+            font-size: 14px;
+        }
+
+    /* =========================
+           FORM
+        ========================= */
+
+    .register-form-group {
+        margin-bottom: 18px;
+    }
+
+        .register-form-group label {
             display: block;
-            font-size: 0.85rem;
-            margin-bottom: 4px;
-            color: #d1b8a5;
+            margin-bottom: 7px;
+            color: #4a3428;
+            font-size: 14px;
+            font-weight: 600;
         }
 
-    .form-control-custom {
-        width: 100%;
-        padding: 10px 14px;
-        border-radius: 10px;
-        border: 1px solid transparent;
-        outline: none;
-        font-size: 0.95rem;
+    .input-wrapper {
+        position: relative;
     }
 
-        .form-control-custom:focus {
-            border-color: #e67e22;
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9b8172;
+            font-size: 17px;
+            z-index: 2;
         }
 
-    /* Tối ưu nút Đăng ký */
-    .btn-login {
+    .register-input {
         width: 100%;
-        padding: 12px;
-        border-radius: 10px;
+        height: 48px;
+        padding: 0 15px 0 45px;
+        border: 1px solid #ddd2ca;
+        border-radius: 11px;
+        background: #faf9f8;
+        color: #3b2418;
+        font-size: 14px;
+        outline: none;
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+    }
+
+        .register-input::placeholder {
+            color: #aaa09a;
+        }
+
+        .register-input:hover {
+            border-color: #c7aa94;
+        }
+
+        .register-input:focus {
+            background: #fff;
+            border-color: #8b5e3c;
+            box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.1);
+        }
+
+        .register-input.input-error {
+            border-color: #dc3545;
+            background: #fff8f8;
+        }
+
+        .register-input.input-success {
+            border-color: #198754;
+            background: #f8fff9;
+        }
+
+    /* =========================
+           ERROR
+        ========================= */
+
+    .phone-error {
+        display: none;
+        margin-top: 6px;
+        color: #dc3545;
+        font-size: 12px;
+    }
+
+    .server-error {
+        padding: 10px 13px;
+        margin-bottom: 15px;
+        border-radius: 9px;
+        background: #fff1f1;
+        border: 1px solid #ffcaca;
+        color: #c62828;
+        font-size: 13px;
+    }
+
+    /* =========================
+           BUTTON
+        ========================= */
+
+    .register-button {
+        width: 100%;
+        height: 50px;
+        border: none;
+        border-radius: 11px;
+        background: #6f452c;
+        color: #fff;
+        font-size: 15px;
         font-weight: 600;
-        margin-top: 10px;
         cursor: pointer;
+        transition: all 0.2s ease;
+        margin-top: 5px;
+    }
+
+        .register-button:hover {
+            background: #53321f;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(83, 50, 31, 0.2);
+        }
+
+        .register-button:active {
+            transform: translateY(0);
+        }
+
+    /* =========================
+           LOGIN LINK
+        ========================= */
+
+    .login-link {
+        text-align: center;
+        margin-top: 22px;
+        color: #8a7b72;
+        font-size: 14px;
+    }
+
+        .login-link a {
+            color: #6f452c;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+            .login-link a:hover {
+                text-decoration: underline;
+            }
+
+    /* =========================
+           RESPONSIVE
+        ========================= */
+
+    @@media (max-width: 768px) {
+
+        .register-page {
+            padding: 25px 15px;
+        }
+
+        .register-box {
+            grid-template-columns: 1fr;
+            min-height: auto;
+        }
+
+        .register-left {
+            padding: 40px 25px;
+        }
+
+        .register-logo {
+            width: 80px;
+            height: 80px;
+        }
+
+        .register-left h1 {
+            font-size: 25px;
+        }
+
+        .register-right {
+            padding: 40px 25px;
+        }
+
+        .register-header h2 {
+            font-size: 26px;
+        }
     }
 </style>
 
-<div class="login-page">
-    <div class="login-box">
 
-        <!-- Cột bên trái: Logo & Thông điệp -->
-        <div class="left-side">
-            <img src="https://cdn-icons-png.flaticon.com/512/924/924514.png" alt="Coffee House Logo" class="logo-image" onerror="this.src='https://cdn-icons-png.flaticon.com/512/924/924514.png'">
-            <h2 style="font-weight: 700; margin-bottom: 10px;">Coffee Premium</h2>
-            <p style="color: #d1b8a5; line-height: 1.5;">
-                Thưởng thức hương vị nguyên bản mỗi ngày. Đăng ký tài khoản để nhận thêm nhiều ưu đãi!
+<div class="register-page">
+
+    <div class="register-box">
+
+        <!-- =========================
+             LEFT SIDE
+        ========================== -->
+
+        <div class="register-left">
+
+            <img src="https://cdn-icons-png.flaticon.com/512/924/924514.png"
+                 alt="Coffee House"
+                 class="register-logo" />
+
+            <h1>
+                Coffee <span>Premium</span>
+            </h1>
+
+            <p>
+                Đăng ký tài khoản để trải nghiệm những sản phẩm
+                cà phê chất lượng và nhận nhiều ưu đãi hấp dẫn
+                từ Coffee House.
             </p>
-        </div>
 
-        <!-- Cột bên phải: Form đăng ký -->
-        <div class="right-side">
-            <div class="logo" style="font-size: 1.8rem; font-weight: 700; margin-bottom: 20px;">
-                Đăng ký
+            <div class="coffee-feature">
+
+                <span>☕ Cà phê nguyên chất</span>
+
+                <span>🚚 Giao hàng nhanh</span>
+
+                <span>🎁 Nhiều ưu đãi</span>
+
             </div>
 
-            <form asp-action="Register" method="post">
+        </div>
 
-                <div class="form-group-custom">
-                    <label>Họ tên</label>
-                    <input asp-for="FullName" class="form-control-custom" placeholder="Nhập họ và tên" required />
+
+        <!-- =========================
+             RIGHT SIDE
+        ========================== -->
+
+        <div class="register-right">
+
+            <div class="register-header">
+
+                <h2>Tạo tài khoản</h2>
+
+                <p>
+                    Điền thông tin bên dưới để bắt đầu sử dụng tài khoản.
+                </p>
+
+            </div>
+
+
+            <form asp-action="Register"
+                  method="post"
+                  id="registerForm">
+
+                <!-- HỌ TÊN -->
+
+                <div class="register-form-group">
+
+                    <label for="FullName">
+                        Họ và tên
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-person"></i>
+
+                        <input asp-for="FullName"
+                               id="FullName"
+                               class="register-input"
+                               placeholder="Nhập họ và tên"
+                               required />
+
+                    </div>
+
                 </div>
 
-                <div class="form-group-custom">
-                    <label>Số điện thoại</label>
-                    <input asp-for="Phone" class="form-control-custom" placeholder="Nhập số điện thoại" required />
+
+                <!-- SỐ ĐIỆN THOẠI -->
+
+                <div class="register-form-group">
+
+                    <label for="phone">
+                        Số điện thoại
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-telephone"></i>
+
+                        <input asp-for="Phone"
+                               id="phone"
+                               class="register-input"
+                               placeholder="Ví dụ: 0938282070"
+                               maxlength="10"
+                               minlength="10"
+                               pattern="^0(3|5|7|8|9)[0-9]{8}$"
+                               inputmode="numeric"
+                               required />
+
+                    </div>
+
+                    <div id="phoneError"
+                         class="phone-error">
+
+                        <i class="bi bi-exclamation-circle"></i>
+
+                        Số điện thoại không hợp lệ.
+                        Vui lòng nhập số điện thoại Việt Nam gồm 10 chữ số.
+
+                    </div>
+
                 </div>
 
-                <div class="form-group-custom">
-                    <label>Địa chỉ</label>
-                    <input asp-for="Address" class="form-control-custom" placeholder="Nhập địa chỉ giao hàng" required />
+
+                <!-- ĐỊA CHỈ -->
+
+                <div class="register-form-group">
+
+                    <label for="Address">
+                        Địa chỉ
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-geo-alt"></i>
+
+                        <input asp-for="Address"
+                               id="Address"
+                               class="register-input"
+                               placeholder="Nhập địa chỉ giao hàng"
+                               required />
+
+                    </div>
+
                 </div>
 
-                <div class="form-group-custom">
-                    <label>Mật khẩu</label>
-                    <input asp-for="Password" type="password" class="form-control-custom" placeholder="Nhập mật khẩu" required />
+
+                <!-- MẬT KHẨU -->
+
+                <div class="register-form-group">
+
+                    <label for="Password">
+                        Mật khẩu
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-lock"></i>
+
+                        <input asp-for="Password"
+                               id="Password"
+                               type="password"
+                               class="register-input"
+                               placeholder="Tối thiểu 6 ký tự"
+                               minlength="6"
+                               required />
+
+                    </div>
+
                 </div>
 
+
+                <!-- SERVER ERROR -->
                 @if (ViewBag.Error != null)
                 {
-                    <div class="alert alert-danger mt-2 mb-2 p-2" style="font-size: 0.85rem; border-radius: 8px;">
+                    <div class="server-error">
+
+                        <i class="bi bi-exclamation-triangle"></i>
+
                         @ViewBag.Error
+
                     </div>
                 }
 
-                <button type="submit" class="btn-login">
-                    Đăng ký ngay
+
+                <!-- BUTTON -->
+
+                <button type="submit"
+                        class="register-button">
+
+                    <i class="bi bi-person-plus me-2"></i>
+
+                    Đăng ký tài khoản
+
                 </button>
 
             </form>
 
-            <div class="text-center mt-3" style="font-size: 0.9rem; color: #d1b8a5;">
+
+            <!-- LOGIN -->
+
+            <div class="login-link">
+
                 Đã có tài khoản?
-                <a asp-controller="Account" asp-action="Login" class="link" style="color: #fff; font-weight: 600; text-decoration: underline;">
-                    Đăng nhập
+
+                <a asp-controller="Account"
+                       asp-action="Login">
+
+                    Đăng nhập ngay
+
                 </a>
+
             </div>
 
         </div>
 
     </div>
+
 </div>
+
+
+<script>
+
+    const phone = document.getElementById("phone");
+    const phoneError = document.getElementById("phoneError");
+    const form = document.getElementById("registerForm");
+
+    const phonePattern = /^0(3|5|7|8|9)[0-9]{8}$/;
+
+
+    // Chỉ cho phép nhập số
+
+    phone.addEventListener("input", function () {
+
+        this.value = this.value.replace(/[^0-9]/g, "");
+
+        if (this.value.length === 0) {
+
+            phoneError.style.display = "none";
+
+            this.classList.remove("input-error");
+            this.classList.remove("input-success");
+
+            return;
+        }
+
+
+        if (!phonePattern.test(this.value)) {
+
+            phoneError.style.display = "block";
+
+            this.classList.add("input-error");
+            this.classList.remove("input-success");
+
+        }
+        else {
+
+            phoneError.style.display = "none";
+
+            this.classList.remove("input-error");
+            this.classList.add("input-success");
+
+        }
+
+    });
+
+
+    // Kiểm tra trước khi gửi
+
+    form.addEventListener("submit", function (event) {
+
+        if (!phonePattern.test(phone.value)) {
+
+            event.preventDefault();
+
+            phoneError.style.display = "block";
+
+            phone.classList.add("input-error");
+
+            phone.focus();
+
+        }
+
+    });
+
+</script>
