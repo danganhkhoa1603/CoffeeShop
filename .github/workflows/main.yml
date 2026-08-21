@@ -1,0 +1,32 @@
+name: Deploy CoffeeShop App to Azure VM
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Source Code
+      uses: actions/checkout@v3
+
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Build Project
+      run: dotnet build CoffeeShop/CoffeeShop.csproj --configuration Release
+
+    - name: Deploy to Azure VM via SSH
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: 70.153.184.194
+        username: lhkadmin
+        key: ${{ secrets.AZURE_VM_SSH_KEY }}
+        script: |
+          cd ~/coffeeshop_web
+          git pull origin master
+          sudo systemctl restart coffeeshop
