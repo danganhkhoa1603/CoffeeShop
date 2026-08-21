@@ -28,5 +28,6 @@ jobs:
         key: ${{ secrets.AZURE_VM_SSH_KEY }}
         script: |
           cd ~/coffeeshop_web
-          git pull origin master
+          git fetch origin master
+          git reset --hard origin/master
           sudo systemctl restart coffeeshop
