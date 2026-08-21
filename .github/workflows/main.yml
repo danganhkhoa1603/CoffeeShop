@@ -30,4 +30,4 @@ jobs:
           cd ~/coffeeshop_web
           git fetch origin master
           git reset --hard origin/master
-          sudo systemctl restart coffeeshop
+          sudo systemctl restart coffeeshop || true
