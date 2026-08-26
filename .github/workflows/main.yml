@@ -30,16 +30,15 @@ jobs:
         target: "~/coffeeshop_web"
         strip_prefix: "publish"
 
-    - name: Restart Web App on Azure VM
+    - name: Restart Web App Service
       uses: appleboy/ssh-action@v1.0.0
       with:
         host: 70.153.184.194
         username: lhkadmin
         key: ${{ secrets.AZURE_VM_SSH_KEY }}
-        command_timeout: 30s
         script: |
-          fuser -k 5000/tcp || true
-          cd ~/coffeeshop_web && nohup dotnet CoffeeShop.dll >/dev/null 2>&1 &
+          sudo systemctl restart coffeeshop
+
 
 
 
