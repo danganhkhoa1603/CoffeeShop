@@ -12,30 +12,13 @@ jobs:
     - name: Checkout Source Code
       uses: actions/checkout@v3
 
-    - name: Setup .NET 10
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '10.0.x'
-
-    - name: Build & Publish Project
-      run: dotnet publish CoffeeShop/CoffeeShop.csproj -c Release -o ./publish
-
-    - name: Copy published files to Azure VM via SCP
-      uses: appleboy/scp-action@v0.1.7
-      with:
-        host: 70.153.184.194
-        username: lhkadmin
-        key: ${{ secrets.AZURE_VM_SSH_KEY }}
-        source: "./publish/*"
-        target: "~/coffeeshop_web"
-        strip_prefix: "publish"
-
-    - name: Restart Web App on Azure VM
+    - name: Deploy to Azure VM via SSH
       uses: appleboy/ssh-action@v1.0.0
       with:
         host: 70.153.184.194
         username: lhkadmin
         key: ${{ secrets.AZURE_VM_SSH_KEY }}
         script: |
-          fuser -k 5000/tcp || true
-          cd ~/coffeeshop_web && nohup dotnet CoffeeShop.dll </dev/null >/dev/null 2>&1 &
+          cd ~/coffeeshop_web
+          git fetch origin master
+          git reset --hard origin/master
