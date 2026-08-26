@@ -46,6 +46,8 @@ jobs:
         username: lhkadmin
         key: ${{ secrets.AZURE_VM_SSH_KEY }}
         script: |
-          sudo systemctl start coffeeshop
+          cp -rf ~/coffeeshop_web/publish/* ~/coffeeshop_web/ || true
+          sudo systemctl restart coffeeshop
           rsync -avz --exclude 'app.log' ~/coffeeshop_web/ lhkadmin@172.16.0.5:~/coffeeshop_web/ || true
           ssh -o StrictHostKeyChecking=no lhkadmin@172.16.0.5 "sudo systemctl restart coffeeshop" || true
+
