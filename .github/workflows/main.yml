@@ -38,4 +38,4 @@ jobs:
         key: ${{ secrets.AZURE_VM_SSH_KEY }}
         script: |
           pkill -f dotnet || true
-          cd ~/coffeeshop_web && (nohup dotnet CoffeeShop.dll > app.log 2>&1 &) && sleep 2
+          cd ~/coffeeshop_web && nohup dotnet CoffeeShop.dll >/dev/null 2>&1 & disown
