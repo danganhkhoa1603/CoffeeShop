@@ -38,4 +38,5 @@ jobs:
         key: ${{ secrets.AZURE_VM_SSH_KEY }}
         script: |
           fuser -k 5000/tcp || true
-          cd ~/coffeeshop_web && nohup dotnet CoffeeShop.dll >/dev/null 2>&1 &
+          cd ~/coffeeshop_web && nohup dotnet CoffeeShop.dll </dev/null >/dev/null 2>&1 &
+
