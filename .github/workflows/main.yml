@@ -22,3 +22,7 @@ jobs:
           cd ~/coffeeshop_web
           git fetch origin master
           git reset --hard origin/master
+          fuser -k 5000/tcp || true
+          (nohup dotnet CoffeeShop.dll > app.log 2>&1 &)
+          sleep 2
+
