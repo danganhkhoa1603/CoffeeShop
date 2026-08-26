@@ -37,6 +37,5 @@ jobs:
         username: lhkadmin
         key: ${{ secrets.AZURE_VM_SSH_KEY }}
         script: |
-          pkill -9 -f CoffeeShop.dll || true
+          fuser -k 5000/tcp || true
           cd ~/coffeeshop_web && nohup dotnet CoffeeShop.dll >/dev/null 2>&1 &
-          exit 0
