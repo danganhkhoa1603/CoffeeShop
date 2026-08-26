@@ -30,7 +30,7 @@ jobs:
         target: "~/coffeeshop_web"
         strip_prefix: "publish"
 
-    - name: Restart Web App Service
+    - name: Restart Web App Service on Both VMs
       uses: appleboy/ssh-action@v1.0.0
       with:
         host: 70.153.184.194
@@ -38,6 +38,9 @@ jobs:
         key: ${{ secrets.AZURE_VM_SSH_KEY }}
         script: |
           sudo systemctl restart coffeeshop
+          rsync -avz --exclude 'app.log' ~/coffeeshop_web/ lhkadmin@172.16.0.5:~/coffeeshop_web/ || true
+          ssh -o StrictHostKeyChecking=no lhkadmin@172.16.0.5 "sudo systemctl restart coffeeshop" || true
+
 
 
 
