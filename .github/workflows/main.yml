@@ -26,9 +26,10 @@ jobs:
         host: 70.153.184.194
         username: lhkadmin
         key: ${{ secrets.AZURE_VM_SSH_KEY }}
-        source: "publish/*"
+        source: "publish/**"
         target: "~/coffeeshop_web"
         strip_prefix: "publish"
+
 
     - name: Restart Web App Service on Both VMs
       uses: appleboy/ssh-action@v1.0.0
