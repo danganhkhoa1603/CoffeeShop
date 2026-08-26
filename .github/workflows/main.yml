@@ -20,7 +20,7 @@ jobs:
     - name: Build & Publish Project
       run: dotnet publish CoffeeShop/CoffeeShop.csproj -c Release -o ./publish
 
-    - name: Copy compiled files to Azure VM via SCP
+    - name: Copy compiled binaries to Azure VM via SCP
       uses: appleboy/scp-action@v0.1.7
       with:
         host: 70.153.184.194
@@ -40,8 +40,3 @@ jobs:
           sudo systemctl restart coffeeshop
           rsync -avz --exclude 'app.log' ~/coffeeshop_web/ lhkadmin@172.16.0.5:~/coffeeshop_web/ || true
           ssh -o StrictHostKeyChecking=no lhkadmin@172.16.0.5 "sudo systemctl restart coffeeshop" || true
-
-
-
-
-
